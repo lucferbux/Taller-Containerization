@@ -1,10 +1,10 @@
-# Proyecto Web - Backend + Front + BBDD
+# Proyecto Web - Containerization
 
-![Frontend](./doc/BBDD.svg)
+![Frontend](./doc/container.svg)
 
 ## Documentación
 
-Puedes encontrar la documentación de este proyecto en [este enlace](https://taller-threepoints-docs.netlify.app/docs/testing/intro).
+Puedes encontrar la documentación de este proyecto en [este enlace](https://taller-threepoints-docs.netlify.app/docs/containers-orchestation/intro).
 
 ## Prototipo
 
@@ -15,9 +15,3 @@ Además, como se enseñará en el propio proyecto, podemos ver el prototipo fina
 ## Setup
 
 Para poner en marcha el proyecto tenemos que seguir los pasos detallados en el [CONTRIBUTING.md](CONTRIBUTING.MD)
-
-
-
-
-
-
