@@ -7,7 +7,7 @@ MONGODB_ATLAS ?= mongodb+srv://<username>:<password>@<cluster>.mongodb.net
 
 .PHONY: dev-api
 dev-api:
-	cd backend && npm run dev
+	cd api && npm run dev
 
 .PHONY: dev-ui
 dev-ui:
@@ -57,12 +57,12 @@ import-atlass:
 install-ui:
 	cd ui && npm install
 
-.PHONY: install-backend
-install-backend:
-	cd backend && npm install
+.PHONY: install-api
+install-api:
+	cd api && npm install
 
 .PHONY: install-dependencies
-install-dependencies: install-ui install-backend
+install-dependencies: install-ui install-api
 
 
 # Audit scripts
@@ -71,9 +71,9 @@ install-dependencies: install-ui install-backend
 audit-frontend:
 	cd ui && npm audit
 
-.PHONY: audit-backend
-audit-backend:
-	cd backend && npm audit
+.PHONY: audit-api
+audit-api:
+	cd api && npm audit
 
 # Testing
 
