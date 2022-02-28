@@ -1,13 +1,17 @@
 USER  ?= user@gmail.com
 PASS  ?= patata
 MONGODB_ATLAS ?= mongodb+srv://<username>:<password>@<cluster>.mongodb.net
-
+DOCKER_COMPOSE_TEST=docker-compose -f docker-compose.test.yml
+DOCKER_COMPOSE_PROD=docker-compose -f docker-compose.prod.yml
+VERSION=0.0.1
+DOCKER_NAMESPACE?=lucferbux
+DOCKER_TAG_SNAPSHOT=$(shell echo VERSION)-$(shell git rev-parse --short HEAD)-SNAPSHOT
 
 # Init Scripts
 
 .PHONY: dev-api
 dev-api:
-	cd backend && npm run dev
+	cd api && npm run dev
 
 .PHONY: dev-ui
 dev-ui:
@@ -57,12 +61,12 @@ import-atlass:
 install-ui:
 	cd ui && npm install
 
-.PHONY: install-backend
-install-backend:
-	cd backend && npm install
+.PHONY: install-api
+install-api:
+	cd api && npm install
 
 .PHONY: install-dependencies
-install-dependencies: install-ui install-backend
+install-dependencies: npm install
 
 
 # Audit scripts
@@ -71,12 +75,38 @@ install-dependencies: install-ui install-backend
 audit-frontend:
 	cd ui && npm audit
 
-.PHONY: audit-backend
-audit-backend:
-	cd backend && npm audit
+.PHONY: audit-api
+audit-api:
+	cd api && npm audit
 
 # Testing
 
 .PHONY: story-book
 story-book:
 	cd ui && npm run storybook
+
+.PHONY: test
+test:
+	CI=true npm run test
+
+# Docker
+
+.PHONY: docker-build
+docker-build:
+	docker build -t $(DOCKER_NAMESPACE)/api:$(DOCKER_TAG_SNAPSHOT) ./api
+	docker build -t $(DOCKER_NAMESPACE)/nginx:$(DOCKER_TAG_SNAPSHOT) -f nginx/Dockerfile .
+
+.PHONY: docker-deploy
+docker-deploy: docker-build
+	for component in api nginx; do \
+		docker push $(DOCKER_NAMESPACE)/$$component:$(DOCKER_TAG_SNAPSHOT) ; \
+	done
+
+.PHONY: docker-ci-up
+docker-ci-up:
+	$(DOCKER_COMPOSE_TEST) up --build -d
+
+.PHONY: docker-ci-api
+docker-ci-api:
+	$(DOCKER_COMPOSE_TEST) run node npm run test
+	$(DOCKER_COMPOSE_TEST) run node npm run lint

@@ -19,17 +19,19 @@ Antes de ejecutar la apliación, es recomendable revisar las variables de entorn
 ********* ui/.env *********
 REACT_APP_LOCALE=es-ES
 REACT_APP_BASE_URI=
-REACT_APP_API_URI=http://localhost:4000
+REACT_APP_API_URI=
+REACT_APP_PROXY_HOST=
 SECRET=e89f987sdfs9d879f8798dsf78978
 ```
 
 * `REACT_APP_LOCALE` configura el idioma local del proyecto.
 * `REACT_APP_API_URI` configura la url a la que la API apuntará.
 * `REACT_APP_BASE_URI` configura un path extra para la uri si fuera necesario (si se configura con por ejemplo `/extra` la url final será `http://localhost:4000/extra/...`)
+* `REACT_APP_PROXY_HOST` configura el proxy host para desarrollo.
 * `SECRET` configura el secreto del JWT (para verificación, actualmente no tiene uso)
 
 ```.env
-********* backend/.env *********
+********* api/.env *********
 #can be 'development' or 'production'
 NODE_ENV=development
 
@@ -48,9 +50,6 @@ SECRET=e89f987sdfs9d879f8798dsf78978
 Instalar las dependencias de ambos proyectos, puedes seguir este script
 
 ```bash
-cd backend
-npm install
-cd ../ui
 npm install
 ```
 
@@ -83,3 +82,7 @@ mongoimport --jsonArray --db portfolio_db --collection projects --file mockProje
 ```
 
 Como podéis comprobar, los ficheros `mockProfile.json`, `mockProjects.json`y `mockUsername.json`. Cambiando los datos allí, e importando los nuevos ficheros, tendremos los cambios reflejados en nuestro documento.
+
+### Contenerización
+
+El proyecto usa `docker` para la contenerización, para crear nuevas imágenes solo hay que ejecutar `make docker-build` para crear las imágenes

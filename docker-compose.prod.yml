@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+
+  nginx:
+    container_name: ui_nginx
+    restart: always
+    volumes:
+      - ./ui/build:/usr/share/nginx/html
+      # Uncomment for certbot
+      #- ./data/nginx:/etc/nginx/conf.d
+      # - ./data/certbot/conf:/etc/letsencrypt
+      # - ./data/certbot/www:/var/www/certbot
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - api
+    networks:
+      - mynet
+
+  api:
+    container_name: api_express
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - 4000
+    restart: always
+    environment:
+      NODE_ENV: production
+      SECRET: e42d8dd28adf34fc489044d5aa21e5166f22a6ef
+      MONGODB_URI: mongodb://mongodb:27017/
+      MONGODB_DB_MAIN: portfolio_db
+      PORT: 4000
+    networks:
+      - mynet
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    environment:
+        MONGO_INITDB_DATABASE: portfolio_db
+    ports:
+      - 27017
+    volumes:
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - mynet
+
+
+networks:
+  mynet:

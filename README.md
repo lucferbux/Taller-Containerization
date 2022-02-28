@@ -1,6 +1,6 @@
 # Proyecto Web - Containerization
 
-![Frontend](./doc/container.svg)
+![Container](./doc/container.svg)
 
 ## Documentación
 

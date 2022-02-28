@@ -33,25 +33,25 @@ const Wrapper = styled.div`
   }
 `
 
-const LinkWrapper = styled.div`
-  display: grid;
-  max-width: 340px;
-  grid-template-columns: 144px 144px;
-  gap: 0px;
-  column-gap: 8px;
-`
+// const LinkWrapper = styled.div`
+//   display: grid;
+//   max-width: 340px;
+//   grid-template-columns: 144px 144px;
+//   gap: 0px;
+//   column-gap: 8px;
+// `
 
-const FooterText = styled.div`
-  max-width: 280px;
-  height: 110px;
-  color: rgba(255, 255, 255, 0.7);
-  padding: 64px 0px;
-  font-size: 13px;
+// const FooterText = styled.div`
+//   max-width: 280px;
+//   height: 110px;
+//   color: rgba(255, 255, 255, 0.7);
+//   padding: 64px 0px;
+//   font-size: 13px;
 
-  @media (max-width: 600px) {
-    text-align: center;
-  }
-`
+//   @media (max-width: 600px) {
+//     text-align: center;
+//   }
+// `
 
 const ContentWrapper = styled.div`
   position: relative;
