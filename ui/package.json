@@ -31,7 +31,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:dev": "react-scripts --openssl-legacy-provider start",
+    "start:dev": "react-scripts start",
+    "start:docker": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

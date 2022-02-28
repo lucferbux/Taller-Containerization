@@ -91,8 +91,8 @@ test:
 
 # Docker
 
-.PHONY: docker-build
-docker-build:
+.PHONY: docker-build-images
+docker-build-images:
 	docker build -t $(DOCKER_NAMESPACE)/api:$(DOCKER_TAG_SNAPSHOT) ./api
 	docker build -t $(DOCKER_NAMESPACE)/nginx:$(DOCKER_TAG_SNAPSHOT) -f nginx/Dockerfile .
 
@@ -101,6 +101,10 @@ docker-deploy: docker-build
 	for component in api nginx; do \
 		docker push $(DOCKER_NAMESPACE)/$$component:$(DOCKER_TAG_SNAPSHOT) ; \
 	done
+
+.PHONY: docker-dev-up
+docker-dev-up:
+	docker-compose up --build -d
 
 .PHONY: docker-ci-up
 docker-ci-up:
