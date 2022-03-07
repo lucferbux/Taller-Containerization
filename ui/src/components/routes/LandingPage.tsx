@@ -20,6 +20,8 @@ const LandingPage = () => {
             <LottieWrapper data-testid="lottieImg" >
               <Lottie 
                 animationData={animationData}
+                loop={true}
+                autoplay={true}
                 />
             </LottieWrapper>
         </Wrapper>   

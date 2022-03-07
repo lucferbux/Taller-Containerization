@@ -26,7 +26,7 @@ services:
     container_name: api_express
     build:
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: prod.Dockerfile
     depends_on:
       - mongodb
     ports:

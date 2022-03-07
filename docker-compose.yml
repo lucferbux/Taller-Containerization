@@ -47,8 +47,6 @@ services:
       - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - mynet
-    
-
 
 networks:
   mynet:

@@ -1,4 +1,4 @@
-FROM node:17-alpine3.14 AS builder
+FROM node:17-alpine3.14
 WORKDIR /usr/src/app 
 COPY package*.json ./
 ADD package.json /usr/src/app/package.json

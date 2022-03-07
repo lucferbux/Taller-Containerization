@@ -106,9 +106,13 @@ docker-deploy: docker-build
 docker-dev-up:
 	docker-compose up --build -d
 
+.PHONY: docker-prod-up
+docker-dev-up:
+	$(DOCKER_COMPOSE_TEST) up --build -d
+
 .PHONY: docker-ci-up
 docker-ci-up:
-	$(DOCKER_COMPOSE_TEST) up --build -d
+	$(DOCKER_COMPOSE_PROD) up --build -d
 
 .PHONY: docker-ci-api
 docker-ci-api:
