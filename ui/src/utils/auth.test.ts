@@ -9,11 +9,9 @@ import {
   logout,
   isUserActive,
   getCurrentUser,
-  removeUser,
   setLogoutIfExpiredHandler,
-  WrongCredentialsException
+  WrongCredentialsException,
 } from "./auth";
-
 
 import createApiClient from "../api/api-client-factory";
 import { User } from "../model/user";
@@ -21,8 +19,6 @@ import { userKey } from "../constants/config";
 jest.mock("../api/api-client-factory");
 
 const mockedCreateApiClient = createApiClient as jest.Mock<ApiClient>;
-
-
 
 const ANY_ACCESS_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTJiNGRmYjUxODlmMzVlZGExZjBhOSIsImVtYWlsIjoibHVjYXNmZXJuYW5kZXphcmFnb25AZ21haWwuY29tIiwiaWF0IjoxNjQ1NDM2MTQ4LCJleHAiOjE2NDU0MzYyMDh9.HmqhMQIHMbTvCM-Ay46xTJAkazz84Ft8198t8AtwsuM";
@@ -33,18 +29,18 @@ const ANY_ID = "6212b4dfb5189f35eda1f0a9";
 const ANY_USERNAME = "lucasfernandezaragon@gmail.com";
 const ANY_PASSWORD = "any-password";
 const USER_TOKEN = userKey;
-const ANY_USER_TOKEN: UserToken = {
-  id: ANY_ID,
-  email: ANY_EMAIL,
-  notBeforeTimestampInMillis: CURRENT_TIMESTAMP,
-  expirationTimestampInMillis: ANY_EXPIRES_IN * 1000 + CURRENT_TIMESTAMP,
-};
+// const ANY_USER_TOKEN: UserToken = {
+//   id: ANY_ID,
+//   email: ANY_EMAIL,
+//   notBeforeTimestampInMillis: CURRENT_TIMESTAMP,
+//   expirationTimestampInMillis: ANY_EXPIRES_IN * 1000 + CURRENT_TIMESTAMP,
+// };
 
 const ANY_USER: User = {
   active: true,
   id: ANY_ID,
   email: ANY_EMAIL,
-}
+};
 
 const ANY_TOKEN_RESPONSE: TokenResponse = {
   token: ANY_ACCESS_TOKEN,
@@ -59,14 +55,14 @@ afterEach(async () => {
   jest.clearAllTimers();
   jest.resetAllMocks();
   localStorage.removeItem(USER_TOKEN);
-  await logout();
 });
 
 test("login happy case", async () => {
   // Given
 
-  const apiClient = <ApiClient>{};
+  const apiClient = {} as ApiClient;
   apiClient.token = jest.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
+  apiClient.logout = jest.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
@@ -80,7 +76,7 @@ test("login happy case", async () => {
 
 test("login - success and then logs out when token expires", async () => {
   // Given
-  const apiClient = <ApiClient>{};
+  const apiClient = {} as ApiClient;
   apiClient.token = jest.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
   apiClient.logout = jest.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
@@ -104,8 +100,9 @@ test("login - success and then logs out when token expires", async () => {
 
 test("login failed - unauthorized", async () => {
   // Given
-  const apiClient = <ApiClient>{};
+  const apiClient = {} as ApiClient;
   apiClient.token = jest.fn().mockRejectedValue(new Unauthorized());
+  apiClient.logout = jest.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
@@ -123,8 +120,9 @@ test("login failed - unauthorized", async () => {
 
 test("login failed - generic error", async () => {
   // Given
-  const apiClient = <ApiClient>{};
+  const apiClient = {} as ApiClient;
   apiClient.token = jest.fn().mockRejectedValue(new GenericError(500, "err"));
+  apiClient.logout = jest.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
@@ -143,6 +141,9 @@ test("login failed - generic error", async () => {
 test("logout happy case", async () => {
   // Given
   setUserToken();
+  const apiClient = {} as ApiClient;
+  apiClient.logout = jest.fn().mockResolvedValue("");
+  mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
   await logout();
@@ -151,7 +152,6 @@ test("logout happy case", async () => {
   expect(isUserActive()).toBeFalsy();
   expect(clearTimeout).toHaveBeenCalledTimes(1);
 });
-
 
 test("init when token exists but it is expired", () => {
   // Given

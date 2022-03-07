@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-i18next": "^8.1.0",
     "babel-loader": "^8.1.0",
+    "http-proxy-middleware": "^2.0.3",
     "i18next": "^21.6.11",
     "i18next-browser-languagedetector": "^6.0.1",
     "jwt-decode": "^3.1.2",
@@ -30,10 +31,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-secure": "HTTPS=true npm start",
+    "lint": "eslint --ext .ts,.tsx src/",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
@@ -78,6 +81,5 @@
     "@types/styled-components": "^5.1.7",
     "jest-canvas-mock": "^2.3.1",
     "storybook-react-i18next": "^1.0.17"
-  },
-  "proxy": "http://localhost:4000"
+  }
 }

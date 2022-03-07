@@ -62,7 +62,7 @@ install-api:
 	cd api && npm install
 
 .PHONY: install-dependencies
-install-dependencies: install-ui install-api
+install-dependencies: npm install
 
 
 # Audit scripts
