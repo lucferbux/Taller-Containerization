@@ -8,13 +8,14 @@ COPY ./ui/ .
 RUN npm run build:docker
 
 
-FROM nginx:alpine
-# Copy custom nginx config
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+FROM nginx:1.21.6-alpine
+ENV NGINX_PORT 80
+ENV NGINX_HTTPS_PORT 443
+ENV FORCE_HTTPS 'false'
+ENV BACKEND_API https://host.docker.internal:5000
+# Copy custom nginx config with template value
+COPY ./nginx/default.conf.template /etc/nginx/templates/
 # Copy certificates
 COPY ./nginx/certificates/ /var/certificates
 # Copy deployment
 COPY --from=builder /usr/src/app/build/ /usr/share/nginx/html
-
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
