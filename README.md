@@ -28,7 +28,7 @@ Para poner en marcha el proyecto tenemos que seguir los pasos detallados en el [
 // TODO 3: Crea el fichero docker-compose.yml que va definir los siguientes componentes:
 
 // TODO 3: Servicio UI que va a tener expuesto el puerto 3000 y va a tener definido la variable REACT_APP_PROXY_HOST al backend en el puerto 4000
-// TODO 3: Servicio API que va a depender del servicio mongodb, con el puerto 400 expuesto y conectando MONGODB_URI a *mongodb://mongodb:27017/*
+// TODO 3: Servicio API que va a depender del servicio mongodb, con el puerto 4000 expuesto y conectando MONGODB_URI a *mongodb://mongodb:27017/*
 // TODO 3: Un servicio Mongodb, que inicialice su base de datos con la variable de entorno MONGO_INITDB_DATABASE y que comparta el siguiente volumen: `./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro`
 
 // TODO 4: Compilar la imagen y comprobar que el despliegue funciona.
