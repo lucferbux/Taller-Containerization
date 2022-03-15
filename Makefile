@@ -141,12 +141,13 @@ k8s-status-pods:
 k8s-delete-all:
 	kubectl delete -f delivery/kubernetes/ -n porfolio-app
 
+.PHONY: k8s-get-service
+k8s-get-ingress:
+	minikube service frontend-nginx-service --url -n porfolio-app 
+
 .PHONY: k8s-dashboard
-k8s-deploy:
+k8s-dashboard:
 	minikube dashboard
-
-
-# port forwoarding -> kubectl port-forward {pod} 4000:80 -n porfolio-app
 
 # Certificates
 
