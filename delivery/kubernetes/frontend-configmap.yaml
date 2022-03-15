@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+data:
+  nginx_port: "80"
+  nginx_https_port: "443"
+  force_https: "false"

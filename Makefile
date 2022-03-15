@@ -97,7 +97,7 @@ docker-build-images:
 	docker build -t $(DOCKER_NAMESPACE)/nginx:$(DOCKER_TAG_SNAPSHOT) -f nginx/Dockerfile .
 
 .PHONY: docker-deploy
-docker-deploy: docker-build
+docker-deploy: docker-build-images
 	for component in api nginx; do \
 		docker push $(DOCKER_NAMESPACE)/$$component:$(DOCKER_TAG_SNAPSHOT) ; \
 	done
@@ -107,14 +107,49 @@ docker-dev-up:
 	docker-compose up --build -d
 
 .PHONY: docker-prod-up
-docker-dev-up:
-	$(DOCKER_COMPOSE_TEST) up --build -d
+docker-prod-up:
+	$(DOCKER_COMPOSE_PROD) up --build
 
 .PHONY: docker-ci-up
 docker-ci-up:
-	$(DOCKER_COMPOSE_PROD) up --build -d
+	$(DOCKER_COMPOSE_TEST) up --build -d
 
 .PHONY: docker-ci-api
-docker-ci-api:
+docker-ci-api: docker-ci-up
 	$(DOCKER_COMPOSE_TEST) run node npm run test
 	$(DOCKER_COMPOSE_TEST) run node npm run lint
+
+# Kubernetes
+
+.PHONY: k8s-create-ns
+k8s-create-ns:
+	kubectl create namespace porfolio-app
+
+.PHONY: k8s-deploy
+k8s-deploy:
+	kubectl apply -f delivery/kubernetes/ -n porfolio-app
+
+.PHONY: k8s-status
+k8s-status:
+	kubectl get all -n porfolio-app
+
+.PHONE: k8s-status-pods
+k8s-status-pods:
+	kubectl get pods -n porfolio-app
+
+.PHONE: k8s-delete-all
+k8s-delete-all:
+	kubectl delete -f delivery/kubernetes/ -n porfolio-app
+
+.PHONY: k8s-dashboard
+k8s-deploy:
+	minikube dashboard
+
+
+# port forwoarding -> kubectl port-forward {pod} 4000:80 -n porfolio-app
+
+# Certificates
+
+.PHONY: generate-certificates
+generate-certificates:
+	cd nginx && ./generate-certificates.sh

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-configmap
+data:
+  node_env: production
+  node_port: "4000"
+  api_url: api-express-service:4000
