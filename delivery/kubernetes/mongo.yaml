@@ -36,6 +36,8 @@ spec:
           - name: init-script-volume
             mountPath: /docker-entrypoint-initdb.d/mongo-init.js
             subPath: mongo-init.js
+          - name: mongo-data-dir
+            mountPath: /data/db
       volumes:
         - name: init-script-volume
           configMap:
@@ -43,6 +45,9 @@ spec:
             items:
             - key: mongo-init.js
               path: mongo-init.js
+        - name: mongo-data-dir
+          persistentVolumeClaim:
+            claimName: mongo-pvc
 ---
 apiVersion: v1
 kind: Service

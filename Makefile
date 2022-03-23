@@ -123,27 +123,27 @@ docker-ci-api: docker-ci-up
 
 .PHONY: k8s-create-ns
 k8s-create-ns:
-	kubectl create namespace porfolio-app
+	kubectl create namespace portfolio-app
 
 .PHONY: k8s-deploy
 k8s-deploy:
-	kubectl apply -f delivery/kubernetes/ -n porfolio-app
+	kubectl apply -f delivery/kubernetes/ -n portfolio-app
 
 .PHONY: k8s-status
 k8s-status:
-	kubectl get all -n porfolio-app
+	kubectl get all -n portfolio-app
 
 .PHONE: k8s-status-pods
 k8s-status-pods:
-	kubectl get pods -n porfolio-app
+	kubectl get pods -n portfolio-app
 
 .PHONE: k8s-delete-all
 k8s-delete-all:
-	kubectl delete -f delivery/kubernetes/ -n porfolio-app
+	kubectl delete -f delivery/kubernetes/ -n portfolio-app
 
 .PHONY: k8s-get-service
-k8s-get-ingress:
-	minikube service frontend-nginx-service --url -n porfolio-app 
+k8s-get-service:
+	minikube service frontend-nginx-service --url -n portfolio-app 
 
 .PHONY: k8s-dashboard
 k8s-dashboard:
