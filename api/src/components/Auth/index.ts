@@ -52,16 +52,18 @@ export async function login(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user: IUserModel = await AuthService.getUser(req.body);
+    const userModel: IUserModel = await AuthService.getUser(req.body);
 
     const token: string = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: userModel._id, email: userModel.email },
       app.get("secret"),
       {
         expiresIn: "60m",
       }
     );
 
+    // TODO: 1) Install cookie-parser
+    // TODO: 1) Change the res to accept a cookie httponly
 
     res.cookie("token", token, {
       expires: new Date(Date.now() + 60 * 60 * 1000),
@@ -83,6 +85,7 @@ export async function login(
   }
 }
 
+// TODO: 3) Add /logout route
 
 /**
  * @export
@@ -130,9 +133,9 @@ export async function user(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user: IUserModel = await UserService.findOne(req.user._id);
+    const userModel: IUserModel = await UserService.findOne(req.user._id);
 
-    res.status(HttpStatus.OK).send({ user });
+    res.status(HttpStatus.OK).send({ userModel });
   } catch (error) {
     if (error.code === HttpStatus.INTERNAL_SERVER_ERROR) {
       return next(new HttpError(error.message.status, error.message));

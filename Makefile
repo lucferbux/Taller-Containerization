@@ -11,7 +11,7 @@ dev-api:
 
 .PHONY: dev-ui
 dev-ui:
-	cd ui && npm run start
+	cd ui && npm run dev
 
 .PHONY: dev-ui-secure
 dev-ui-secure:

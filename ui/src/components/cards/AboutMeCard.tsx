@@ -7,6 +7,8 @@ import AboutMeCardRow from "./AboutMeCardRow";
 
 import avatarCard from "./Avatar.jpg";
 
+// TODO: 11) Crear storybook para AboutMe Card
+// TODO: 12) Crear tests de integración con testing-library/react para AboutMeCard
 
 interface AboutMeCardProps {
   aboutMe: AboutMe;
@@ -17,7 +19,7 @@ const AboutMeCard = (props: AboutMeCardProps) => {
 
   return (
     <Wrapper>
-      <ImageWrapper src={avatarCard}  data-testid="aboutImg" />
+      <ImageWrapper src={avatarCard} data-testid="aboutImg" />
       <InfoWrapper>
         <InfoSection>
           <AboutMeCardRow
@@ -79,7 +81,6 @@ const Wrapper = styled.div`
     grid-template-columns: 40% auto;
     grid-template-rows: auto;
     column-gap: 60px;
-    
   }
 
   @media (max-width: 810px) {
@@ -112,7 +113,6 @@ const ImageWrapper = styled.img`
   @media (max-width: 1024px) {
     max-height: 400px;
   }
-
 `;
 
 const InfoWrapper = styled.div`

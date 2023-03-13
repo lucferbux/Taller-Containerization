@@ -1,44 +1,59 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { beforeEach, expect, vi, describe, it } from "vitest";
+import { getDefaultBaseUrl } from "./config";
 
-beforeEach(() => {
-  jest.resetModules();
-  delete process.env.REACT_APP_BASE_URI;
-  delete process.env.REACT_APP_API_URI;
+describe("config testing", () => {
+  let baseUrl = "";
+
+  beforeEach(() => {
+    vi.resetModules();
+    delete import.meta.env.VITE_BASE_URI;
+    delete import.meta.env.VITE_API_URI;
+  });
+
+  it("config with api base url from environment variable", () => {
+    // Given
+    const anyBaseUrl = "any-base-url";
+    import.meta.env.VITE_BASE_URI = anyBaseUrl;
+
+    // And
+    baseUrl = getDefaultBaseUrl(
+      import.meta.env.VITE_BASE_URI,
+      import.meta.env.VITE_API_URI
+    );
+
+    // Then
+    expect(baseUrl).toBe(anyBaseUrl);
+  });
+
+  it("config with api base url with another path", () => {
+    // Given
+    const anyBaseUrl = "any-base-url";
+    import.meta.env.VITE_BASE_URI = anyBaseUrl;
+
+    // And
+    const extraPath = "/extraPath";
+    import.meta.env.VITE_API_URI = extraPath;
+
+    baseUrl = getDefaultBaseUrl(
+      import.meta.env.VITE_BASE_URI,
+      import.meta.env.VITE_API_URI
+    );
+
+    // Then
+    expect(baseUrl).toBe(anyBaseUrl + extraPath);
+  });
+
+  it("config with no api base url", () => {
+    baseUrl = getDefaultBaseUrl(
+      import.meta.env.VITE_BASE_URI,
+      import.meta.env.VITE_API_URI
+    );
+
+    // Then
+    expect(baseUrl).toBe("");
+  });
 });
 
-
-test("config with api base url from environment variable", () => {
-  // Given
-  const anyBaseUrl = "any-base-url";
-  process.env.REACT_APP_BASE_URI = anyBaseUrl;
-
-  // When
-  const { API_BASE_URI } = require("./config.ts");
-
-  // Then
-  expect(API_BASE_URI).toBe(anyBaseUrl);
-});
-
-test("config with api base url with another path", () => {
-  // Given
-  const anyBaseUrl = "any-base-url";
-  process.env.REACT_APP_BASE_URI = anyBaseUrl;
-
-  // And
-  const extraPath = "/extraPath";
-  process.env.REACT_APP_API_URI = extraPath;
-
-  // When
-  const { API_BASE_URI } = require("./config.ts");
-
-  // Then
-  expect(API_BASE_URI).toBe(anyBaseUrl + extraPath);
-});
-
-test("config with no api base url", () => {
-  // When
-  const { API_BASE_URI } = require("./config.ts");
-
-  // Then
-  expect(API_BASE_URI).toBeUndefined();
-});
+export {};

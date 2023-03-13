@@ -12,32 +12,39 @@ export default {
 const project: Project = {
   _id: "8a9sdfasdf989fd",
   title: "React",
-  description: "React es el Framework web basado en componentes de Facebook. Cuenta con una curva de aprendizaje corta y mucha flexibilidad",
+  description:
+    "React es el Framework web basado en componentes de Facebook. Cuenta con una curva de aprendizaje corta y mucha flexibilidad",
   version: "17.0.1",
   link: "https://reactjs.org/docs/hello-world.html",
   tag: "JavaScript, Typescript, React",
-  timestamp: 765817712000
+  timestamp: 765817712000,
 };
 
-const userLoggged: User = { active: true, id: "a8sfd9sf", email: "johndoe@gmail.com" }
+const userLoggged: User = {
+  active: true,
+  id: "a8sfd9sf",
+  email: "johndoe@gmail.com",
+};
 
-const Template: ComponentStory<typeof ProjectCard> = (args) => <ProjectCard {...args} />;
+const Template: ComponentStory<typeof ProjectCard> = (args) => (
+  <ProjectCard {...args} />
+);
 
 export const LoggedOut = Template.bind({});
 LoggedOut.args = {
   project: project,
   closeButton: () => {},
   updateButton: () => {},
-  user: undefined
-}
+  user: undefined,
+};
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
   project: project,
   closeButton: () => {},
   updateButton: () => {},
-  user: userLoggged
-}
+  user: userLoggged,
+};
 
 export const Caption = Template.bind({});
 Caption.args = {
@@ -45,5 +52,5 @@ Caption.args = {
   closeButton: () => {},
   updateButton: () => {},
   user: undefined,
-  captionText: "New version"
-}
+  captionText: "New version",
+};

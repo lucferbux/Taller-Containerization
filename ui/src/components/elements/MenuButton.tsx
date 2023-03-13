@@ -2,12 +2,12 @@ import styled from "styled-components";
 import { themes } from "../../styles/ColorStyles";
 
 interface MenuButtonProps {
-  isVisible: Boolean;
+  isVisible: boolean;
   toggle: () => void;
   actions: Array<MenuAction>;
   xAxis?: number;
   yAxis?: number;
-  dotButtonColorLight?: Boolean;
+  dotButtonColorLight?: boolean;
 }
 
 export interface MenuAction {
@@ -25,7 +25,8 @@ export function MenuButton(props: MenuButtonProps) {
 
   return (
     <>
-      <KebabButton data-testid="menuButton"
+      <KebabButton
+        data-testid="menuButton"
         onClick={(e: React.MouseEvent<HTMLElement>) => toggleMenu(e)}
       >
         <KebabDot dotButtonColorLight={props.dotButtonColorLight} />
@@ -52,7 +53,6 @@ export function MenuButton(props: MenuButtonProps) {
   );
 }
 
-
 const KebabButton = styled.button`
   border: none;
   background: none;
@@ -61,14 +61,15 @@ const KebabButton = styled.button`
 `;
 
 interface KebabDotProps {
-  dotButtonColorLight?: Boolean;
+  dotButtonColorLight?: boolean;
 }
 
 const KebabDot = styled.div<KebabDotProps>`
   width: 4px;
   height: 4px;
   border-radius: 2px;
-  background: ${(props) => (props.dotButtonColorLight ? themes.dark.text1 : themes.light.text1)};
+  background: ${(props) =>
+    props.dotButtonColorLight ? themes.dark.text1 : themes.light.text1};
   margin: 2px 0;
 
   @media (prefers-color-scheme: dark) {
@@ -84,8 +85,8 @@ interface MenuDropDownProps {
 const MenuDropDown = styled.div<MenuDropDownProps>`
   position: absolute;
 
-  right: ${(props) => props.xAxis ? `${props.xAxis}px` : "6px"};
-  top: ${(props) => props.yAxis ? `${props.yAxis}px` : "30px"};
+  right: ${(props) => (props.xAxis ? `${props.xAxis}px` : "6px")};
+  top: ${(props) => (props.yAxis ? `${props.yAxis}px` : "30px")};
 
   border-radius: 4px;
   background-color: ${themes.light.card.backgroundColorFull};
@@ -108,7 +109,7 @@ const MenuDropDownOverlay = styled.div`
 `;
 
 interface MenuDropDownItemProps {
-  isWarning: Boolean;
+  isWarning: boolean;
 }
 
 const MenuDropDownItem = styled.button<MenuDropDownItemProps>`

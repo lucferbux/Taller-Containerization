@@ -1,7 +1,7 @@
-import ProjectsService from './service';
-import { HttpError } from '@/config/error';
-import { IProjectsModel } from './model';
-import { NextFunction, Request, Response } from 'express';
+import ProjectsService from "./service";
+import { HttpError } from "@/config/error";
+import { IProjectsModel } from "./model";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * @export
@@ -10,14 +10,20 @@ import { NextFunction, Request, Response } from 'express';
  * @param {NextFunction} next
  * @returns {Promise < void >}
  */
-export async function findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const aboutMeArray: IProjectsModel[] = await ProjectsService.findAll();
-        const aboutMeArraySorted = aboutMeArray.sort((a, b) => (a.timestamp > b.timestamp) ? 1 : -1 );
-        res.status(200).json(aboutMeArraySorted);
-    } catch (error) {
-        next(new HttpError(error.message.status, error.message));
-    }
+export async function findAll(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const aboutMeArray: IProjectsModel[] = await ProjectsService.findAll();
+
+    res
+      .status(200)
+      .json(aboutMeArray.sort((a, b) => a.timestamp - b.timestamp));
+  } catch (error) {
+    next(new HttpError(error.message.status, error.message));
+  }
 }
 
 /**
@@ -27,14 +33,20 @@ export async function findAll(req: Request, res: Response, next: NextFunction): 
  * @param {NextFunction} next
  * @returns {Promise < void >}
  */
-export async function findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const aboutMe: IProjectsModel = await ProjectsService.findOne(req.params.id);
+export async function findOne(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const aboutMe: IProjectsModel = await ProjectsService.findOne(
+      req.params.id
+    );
 
-        res.status(200).json(aboutMe);
-    } catch (error) {
-        next(new HttpError(error.message.status, error.message));
-    }
+    res.status(200).json(aboutMe);
+  } catch (error) {
+    next(new HttpError(error.message.status, error.message));
+  }
 }
 
 /**
@@ -44,14 +56,18 @@ export async function findOne(req: Request, res: Response, next: NextFunction): 
  * @param {NextFunction} next
  * @returns {Promise < void >}
  */
-export async function create(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const aboutMe: IProjectsModel = await ProjectsService.insert(req.body);
+export async function create(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const aboutMe: IProjectsModel = await ProjectsService.insert(req.body);
 
-        res.status(201).json(aboutMe);
-    } catch (error) {
-        next(new HttpError(error.message.status, error.message));
-    }
+    res.status(201).json(aboutMe);
+  } catch (error) {
+    next(new HttpError(error.message.status, error.message));
+  }
 }
 
 /**
@@ -61,16 +77,20 @@ export async function create(req: Request, res: Response, next: NextFunction): P
  * @param {NextFunction} next
  * @returns {Promise < void >}
  */
- export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        await ProjectsService.remove(req.body._id);
-        delete req.body._id;
-        const aboutMe: IProjectsModel = await ProjectsService.insert(req.body);
+export async function update(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    await ProjectsService.remove(req.body._id);
+    delete req.body._id;
+    const aboutMe: IProjectsModel = await ProjectsService.insert(req.body);
 
-        res.status(201).json(aboutMe);
-    } catch (error) {
-        next(new HttpError(error.message.status, error.message));
-    }
+    res.status(201).json(aboutMe);
+  } catch (error) {
+    next(new HttpError(error.message.status, error.message));
+  }
 }
 
 /**
@@ -80,12 +100,16 @@ export async function create(req: Request, res: Response, next: NextFunction): P
  * @param {NextFunction} next
  * @returns {Promise < void >}
  */
-export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-        const aboutMe: IProjectsModel = await ProjectsService.remove(req.body.id);
+export async function remove(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const aboutMe: IProjectsModel = await ProjectsService.remove(req.body.id);
 
-        res.status(201).json(aboutMe);
-    } catch (error) {
-        next(new HttpError(error.message.status, error.message));
-    }
+    res.status(200).json(aboutMe);
+  } catch (error) {
+    next(new HttpError(error.message.status, error.message));
+  }
 }

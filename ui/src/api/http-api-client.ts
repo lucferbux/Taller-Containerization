@@ -55,6 +55,7 @@ const handleResponse = async <T>(func: () => Promise<T>): Promise<T> => {
     return await func();
   } catch (e) {
     if (e instanceof Unauthorized) {
+      // TODO: 4) Refactor auth calls
       removeUser();
       window.location.replace("/");
     }
@@ -62,6 +63,7 @@ const handleResponse = async <T>(func: () => Promise<T>): Promise<T> => {
   }
 };
 
+// TODO: 5) Remove authorization header from all requests
 
 export default class HttpApiClient implements ApiClient {
   baseUrl: string;
@@ -73,8 +75,8 @@ export default class HttpApiClient implements ApiClient {
   async token(email: string, password: string): Promise<TokenResponse> {
     const body = new URLSearchParams({
       email: email,
-      password: password
-    })
+      password: password,
+    });
     const response = await fetch(this.baseUrl + "/auth/login/", {
       method: "POST",
       body: body,
@@ -84,7 +86,8 @@ export default class HttpApiClient implements ApiClient {
     }
     return response.json();
   }
-  
+
+  // TODO: 5) Add logout to api call
 
   async logout(): Promise<ProjectResponse> {
     const response = await fetch(this.baseUrl + "/auth/logout/", {
@@ -96,15 +99,11 @@ export default class HttpApiClient implements ApiClient {
     return response.json();
   }
 
-
   getAboutMe = (): Promise<AboutMe> =>
     handleResponse(async () => {
-      const response = await fetch(
-        this.baseUrl + `/v1/aboutme/`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(this.baseUrl + `/v1/aboutme/`, {
+        method: "GET",
+      });
       if (!response.ok) {
         throw await createApiError(response);
       }
@@ -113,61 +112,57 @@ export default class HttpApiClient implements ApiClient {
 
   getProjects = (): Promise<Project[]> =>
     handleResponse(async () => {
-      const response = await fetch(
-        this.baseUrl + `/v1/projects/`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(this.baseUrl + `/v1/projects/`, {
+        method: "GET",
+      });
       if (!response.ok) {
         throw await createApiError(response);
       }
       return response.json();
     });
 
-    async postProject(project: Project): Promise<ProjectResponse> {
-      const response = await fetch(this.baseUrl + "/v1/projects/", {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(project),
-      });
-      if (!response.ok) {
-        throw await createApiError(response);
-      }
-      return response.json();
+  async postProject(project: Project): Promise<ProjectResponse> {
+    const response = await fetch(this.baseUrl + "/v1/projects/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(project),
+    });
+    if (!response.ok) {
+      throw await createApiError(response);
     }
+    return response.json();
+  }
 
-    async updateProject(project: Project): Promise<ProjectResponse> {
-      const response = await fetch(this.baseUrl + "/v1/projects/", {
-        method: "PUT",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(project),
-      });
-      if (!response.ok) {
-        throw await createApiError(response);
-      }
-      return response.json();
+  async updateProject(project: Project): Promise<ProjectResponse> {
+    const response = await fetch(this.baseUrl + "/v1/projects/", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(project),
+    });
+    if (!response.ok) {
+      throw await createApiError(response);
     }
+    return response.json();
+  }
 
-    async deleteProject(projectId: string): Promise<ProjectResponse> {
-      const response = await fetch(this.baseUrl + "/v1/projects/", {
-        method: "DELETE",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({id: projectId}),
-      });
-      if (!response.ok) {
-        throw await createApiError(response);
-      }
-      return response.json();
+  async deleteProject(projectId: string): Promise<ProjectResponse> {
+    const response = await fetch(this.baseUrl + "/v1/projects/", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: projectId }),
+    });
+    if (!response.ok) {
+      throw await createApiError(response);
     }
-  
+    return response.json();
+  }
 }

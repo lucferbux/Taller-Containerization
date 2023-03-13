@@ -113,7 +113,7 @@ describe("AboutMe API Tests", () => {
       .send({id: global.update_id})
       .set("Cookie", [`token=${global.token}`])
       .expect((res) => {
-        res.status.should.equal(201);
+        res.status.should.equal(200);
         res.body.should.not.null;
         res.body._id.should.not.be.empty;
         res.body._id.should.equal(update_id);

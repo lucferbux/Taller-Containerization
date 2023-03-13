@@ -2,6 +2,7 @@ const UserModel = require("../src/components/User/model").default;
 const ProjectModel = require("../src/components/Projects/model").default;
 const AboutMeModel = require("../src/components/AboutMe/model").default;
 const AuthService = require("../src/components/Auth/service").default;
+const db = require("../src/config/connection/connection").db;
 
 
 const user = require("./fixtures/user.json");
@@ -15,9 +16,7 @@ chai.should();
 
 before("setup database", async () => {
   try {
-    await UserModel.deleteMany({});
-    await ProjectModel.deleteMany({});
-    await AboutMeModel.deleteMany({});
+    db.dropDatabase();
   } catch (error) {
     console.error("Error Deletion AboutMe API Test");
     console.error(error);

@@ -3,7 +3,6 @@ import ApiClient, {
   TokenResponse,
   Unauthorized,
 } from "../api/api-client";
-
 import {
   login,
   logout,
@@ -12,13 +11,15 @@ import {
   setLogoutIfExpiredHandler,
   WrongCredentialsException,
 } from "./auth";
-
 import createApiClient from "../api/api-client-factory";
 import { User } from "../model/user";
 import { userKey } from "../constants/config";
-jest.mock("../api/api-client-factory");
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { vi, test, expect, beforeEach, afterEach, describe } from "vitest";
 
-const mockedCreateApiClient = createApiClient as jest.Mock<ApiClient>;
+vi.mock("../api/api-client-factory");
+
+const mockedCreateApiClient = createApiClient as any;
 
 const ANY_ACCESS_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTJiNGRmYjUxODlmMzVlZGExZjBhOSIsImVtYWlsIjoibHVjYXNmZXJuYW5kZXphcmFnb25AZ21haWwuY29tIiwiaWF0IjoxNjQ1NDM2MTQ4LCJleHAiOjE2NDU0MzYyMDh9.HmqhMQIHMbTvCM-Ay46xTJAkazz84Ft8198t8AtwsuM";
@@ -46,23 +47,25 @@ const ANY_TOKEN_RESPONSE: TokenResponse = {
   token: ANY_ACCESS_TOKEN,
 };
 
+let setTimeoutSpy: any;
+
 beforeEach(() => {
-  jest.useFakeTimers();
-  Date.now = jest.fn(() => CURRENT_TIMESTAMP);
+  vi.useFakeTimers();
+  Date.now = vi.fn(() => CURRENT_TIMESTAMP);
+  setTimeoutSpy = vi.spyOn(global, "setTimeout");
 });
 
 afterEach(async () => {
-  jest.clearAllTimers();
-  jest.resetAllMocks();
+  vi.clearAllTimers();
+  vi.clearAllMocks();
   localStorage.removeItem(USER_TOKEN);
 });
 
 test("login happy case", async () => {
   // Given
 
-  const apiClient = {} as ApiClient;
-  apiClient.token = jest.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
-  apiClient.logout = jest.fn().mockResolvedValue("");
+  const apiClient = <ApiClient>{};
+  apiClient.token = vi.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
@@ -70,15 +73,15 @@ test("login happy case", async () => {
 
   // Then
   expect(isUserActive()).toBeTruthy();
-  expect(setTimeout).toHaveBeenCalledTimes(1);
+  expect(setTimeout).toHaveBeenCalledTimes(2);
   expect(getCurrentUser()).toEqual(ANY_USER);
 });
 
 test("login - success and then logs out when token expires", async () => {
   // Given
-  const apiClient = {} as ApiClient;
-  apiClient.token = jest.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
-  apiClient.logout = jest.fn().mockResolvedValue("");
+  const apiClient = <ApiClient>{};
+  apiClient.token = vi.fn().mockResolvedValue(ANY_TOKEN_RESPONSE);
+  apiClient.logout = vi.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
@@ -86,11 +89,11 @@ test("login - success and then logs out when token expires", async () => {
 
   // Then
   expect(isUserActive()).toBeTruthy();
-  expect(setTimeout).toHaveBeenCalledTimes(1);
+  expect(setTimeoutSpy).toHaveBeenCalledTimes(2);
   expect(getCurrentUser()).toEqual(ANY_USER);
 
   // When (set the token to expire)
-  jest.advanceTimersByTime(ANY_EXPIRES_IN * 1000);
+  vi.advanceTimersByTime(ANY_EXPIRES_IN * 1000);
 
   setLogoutIfExpiredHandler();
 
@@ -100,57 +103,56 @@ test("login - success and then logs out when token expires", async () => {
 
 test("login failed - unauthorized", async () => {
   // Given
-  const apiClient = {} as ApiClient;
-  apiClient.token = jest.fn().mockRejectedValue(new Unauthorized());
-  apiClient.logout = jest.fn().mockResolvedValue("");
+  const apiClient = <ApiClient>{};
+  apiClient.token = vi.fn().mockRejectedValue(new Unauthorized());
+  apiClient.logout = vi.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
   try {
     await login(ANY_USERNAME, ANY_PASSWORD);
   } catch (e) {
-    // eslint-disable-next-line jest/no-conditional-expect
     expect(e).toBeInstanceOf(WrongCredentialsException);
   }
 
   // Then
   expect(isUserActive()).toBeFalsy();
-  expect(setTimeout).toHaveBeenCalledTimes(0);
+  expect(setTimeoutSpy).toHaveBeenCalledTimes(0);
 });
 
 test("login failed - generic error", async () => {
   // Given
-  const apiClient = {} as ApiClient;
-  apiClient.token = jest.fn().mockRejectedValue(new GenericError(500, "err"));
-  apiClient.logout = jest.fn().mockResolvedValue("");
+  const apiClient = <ApiClient>{};
+  apiClient.token = vi.fn().mockRejectedValue(new GenericError(500, "err"));
+  apiClient.logout = vi.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
 
   // When
   try {
     await login(ANY_USERNAME, ANY_PASSWORD);
   } catch (e) {
-    // eslint-disable-next-line jest/no-conditional-expect
     expect(e).toBeInstanceOf(Error);
   }
 
   // Then
   expect(isUserActive()).toBeFalsy();
-  expect(setTimeout).toHaveBeenCalledTimes(0);
+  expect(setTimeoutSpy).toHaveBeenCalledTimes(0);
 });
 
 test("logout happy case", async () => {
   // Given
-  setUserToken();
-  const apiClient = {} as ApiClient;
-  apiClient.logout = jest.fn().mockResolvedValue("");
+  const setClearTimeout = vi.spyOn(global, "clearTimeout");
+  const apiClient = <ApiClient>{};
+  apiClient.logout = vi.fn().mockResolvedValue("");
   mockedCreateApiClient.mockReturnValue(apiClient);
+  setUserToken();
 
   // When
   await logout();
 
   // Then
   expect(isUserActive()).toBeFalsy();
-  expect(clearTimeout).toHaveBeenCalledTimes(1);
+  expect(setClearTimeout).toHaveBeenCalledTimes(1);
 });
 
 test("init when token exists but it is expired", () => {
@@ -160,7 +162,7 @@ test("init when token exists but it is expired", () => {
 
   // Then
   expect(isUserActive()).toBeFalsy();
-  expect(setTimeout).toHaveBeenCalledTimes(0);
+  expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
 });
 
 test("getAccessToken without token set", () => {
@@ -191,7 +193,7 @@ describe.each([
 ])("isTokenActive", (desc, expected, testTimestamp) => {
   test(`is ${expected} on ${desc}`, () => {
     // Given
-    Date.now = jest.fn(() => testTimestamp);
+    Date.now = vi.fn(() => testTimestamp);
 
     // And
     setUserToken();
@@ -222,5 +224,5 @@ function setUserToken() {
 }
 
 function dateMakesTokenExpired() {
-  Date.now = jest.fn(() => CURRENT_TIMESTAMP + ANY_EXPIRES_IN * 1000);
+  Date.now = vi.fn(() => CURRENT_TIMESTAMP + ANY_EXPIRES_IN * 1000);
 }

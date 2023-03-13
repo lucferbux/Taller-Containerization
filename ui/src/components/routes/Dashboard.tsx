@@ -10,7 +10,7 @@ import { themes } from "../../styles/ColorStyles";
 import { MediumText } from "../../styles/TextStyles";
 import createApiClient from "../../api/api-client-factory";
 import useProject from "../../hooks/useProject";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 interface Response {
@@ -24,11 +24,11 @@ const Dashboard = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const { user } = useAuth();
-  
+
   const { addNotification, removeLastNotification } = useApp();
 
   const { setProjectOrUndefined } = useProject();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function retrieveInfo() {
@@ -38,7 +38,7 @@ const Dashboard = () => {
         const projects: Project[] = await api.getProjects();
         const aboutme: AboutMe = await api.getAboutMe();
         setResponse({ aboutme, projects });
-      } catch(Error) {
+      } catch (Error) {
         setError("Info not found");
       } finally {
         stopSearch();
@@ -50,19 +50,20 @@ const Dashboard = () => {
       setError(undefined);
       addNotification(msg);
     }
-  
+
     function stopSearch() {
       removeLastNotification();
     }
 
-    
-
     retrieveInfo();
   }, [setResponse, t, addNotification, removeLastNotification]);
 
-  async function deleteProject(element: React.MouseEvent<HTMLElement>, id: string) {
-    element.preventDefault()
-    element.stopPropagation()
+  async function deleteProject(
+    element: React.MouseEvent<HTMLElement>,
+    id: string
+  ) {
+    element.preventDefault();
+    element.stopPropagation();
     const api = createApiClient();
     try {
       await api.deleteProject(id);
@@ -72,14 +73,17 @@ const Dashboard = () => {
     } catch (e) {
       console.log("Error deleting project", e);
     }
-  }   
+  }
 
-  function updateProject(element: React.MouseEvent<HTMLElement>, project: Project) {
-    element.preventDefault()
-    element.stopPropagation()
+  function updateProject(
+    element: React.MouseEvent<HTMLElement>,
+    project: Project
+  ) {
+    element.preventDefault();
+    element.stopPropagation();
     setProjectOrUndefined(project);
-    history.push("/admin");
-  }   
+    navigate("/admin");
+  }
 
   return (
     <Wrapper>
@@ -91,7 +95,13 @@ const Dashboard = () => {
             </AboutMeWrapper>
             <ProjectWrapper>
               {response?.projects?.map((project, index) => (
-                <ProjectCard project={project} key={index} user={user} closeButton={(e, id) => deleteProject(e, id)} updateButton={(e, id) => updateProject(e, id)} />
+                <ProjectCard
+                  project={project}
+                  key={index}
+                  user={user}
+                  closeButton={(e, id) => deleteProject(e, id)}
+                  updateButton={(e, id) => updateProject(e, id)}
+                />
               ))}
             </ProjectWrapper>
           </ResponseWrapper>
@@ -156,7 +166,7 @@ const ProjectWrapper = styled.div`
     grid-template-columns: auto auto;
   }
 
-  @media (max-width: 1080px) {  
+  @media (max-width: 1080px) {
     grid-template-columns: auto auto auto;
     gap: 20px;
   }

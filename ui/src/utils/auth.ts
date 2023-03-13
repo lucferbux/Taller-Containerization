@@ -22,6 +22,11 @@ class WrongCredentialsException extends Error {}
 
 let logoutIfExpiredHandlerId: NodeJS.Timeout;
 
+// TODO: 4) Adapt frontend to do the following:
+// 1. Remove jwt local storage
+// 2. Use a new User Local Storage with expiration time of JWT and User attributes
+// 3. Call backend to logout if expired
+
 function setLogoutIfExpiredHandler() {
   if (!isUserActive()) {
     return;
@@ -71,6 +76,7 @@ async function logout() {
     await api.logout();
   } catch (error) {
     console.log(error);
+    console.log("Error while logging out");
   }
 }
 
