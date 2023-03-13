@@ -2,7 +2,7 @@ db = db.getSiblingDB('portfolio_db');
 
 db.createCollection('users');
 db.createCollection('profile');
-db.createCollection('profile');
+db.createCollection('projects');
 
 db.users.insertMany([
     {
