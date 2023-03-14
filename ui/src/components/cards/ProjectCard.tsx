@@ -1,17 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import useToggle from "../../hooks/useToogle";
-import { Project } from "../../model/project";
-import { User } from "../../model/user";
-import { themes } from "../../styles/ColorStyles";
-import {
-  H3,
-  DescriptionCard,
-  SmallText,
-  SmallText2,
-} from "../../styles/TextStyles";
-import { MenuButton } from "../elements/MenuButton";
-import codeIcon from "./code.svg";
+import React from 'react';
+import styled from 'styled-components';
+import useToggle from '../../hooks/useToogle';
+import { Project } from '../../model/project';
+import { User } from '../../model/user';
+import { themes } from '../../styles/ColorStyles';
+import { H3, DescriptionCard, SmallText, SmallText2 } from '../../styles/TextStyles';
+import { MenuButton } from '../elements/MenuButton';
+import codeIcon from './code.svg';
 
 // TODO: 10) Añadir testing para ProjectCard
 
@@ -22,10 +17,7 @@ interface ProjectCardProps {
   project: Project;
   user: User | undefined;
   closeButton: (element: React.MouseEvent<HTMLElement>, id: string) => void;
-  updateButton: (
-    element: React.MouseEvent<HTMLElement>,
-    project: Project
-  ) => void;
+  updateButton: (element: React.MouseEvent<HTMLElement>, project: Project) => void;
   captionText?: string;
 }
 
@@ -58,26 +50,26 @@ const ProjectCard = (props: ProjectCardProps) => {
               toggle={toggle}
               actions={[
                 {
-                  title: "Update",
+                  title: 'Update',
                   isWarning: false,
                   action: (e: React.MouseEvent<HTMLElement>) => {
                     props.updateButton(e, project);
-                  },
+                  }
                 },
                 {
-                  title: "Delete",
+                  title: 'Delete',
                   isWarning: true,
                   action: (e: React.MouseEvent<HTMLElement>) => {
-                    props.closeButton(e, project._id ?? "");
+                    props.closeButton(e, project._id ?? '');
                     toggle();
-                  },
-                },
+                  }
+                }
               ]}
             />
           )}
         </CardInfo>
         <CardCaption data-testid="caption">
-          {props.captionText ? props.captionText : ""}
+          {props.captionText ? props.captionText : ''}
         </CardCaption>
         <CardTitle>{project.title}</CardTitle>
         <CardDescription>{project.description}</CardDescription>

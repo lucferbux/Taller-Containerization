@@ -1,28 +1,28 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import useAuth from "../../hooks/useAuth";
-import useToggle from "../../hooks/useToogle";
-import { themes } from "../../styles/ColorStyles";
-import { MenuButton } from "../elements/MenuButton";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import useAuth from '../../hooks/useAuth';
+import useToggle from '../../hooks/useToogle';
+import { themes } from '../../styles/ColorStyles';
+import { MenuButton } from '../elements/MenuButton';
 
 // TODO: 10) Añadir testing para Header
 
 export const home = {
-  title: "nav.home",
-  link: "/",
+  title: 'nav.home',
+  link: '/'
 };
 
 export const menuData = [
   {
-    title: "nav.dashboard",
-    link: "/dashboard",
+    title: 'nav.dashboard',
+    link: '/dashboard'
   },
   {
-    title: "nav.admin",
-    link: "/admin",
-  },
+    title: 'nav.admin',
+    link: '/admin'
+  }
 ];
 
 const Header = () => {
@@ -52,17 +52,17 @@ const Header = () => {
             toggle={toggle}
             actions={[
               {
-                title: "Logout",
+                title: 'Logout',
                 isWarning: true,
                 action: () => {
                   try {
                     logout();
                     toggle();
                   } catch (e) {
-                    console.log("Error logging out");
+                    console.log('Error logging out');
                   }
-                },
-              },
+                }
+              }
             ]}
             xAxis={30}
             yAxis={46}

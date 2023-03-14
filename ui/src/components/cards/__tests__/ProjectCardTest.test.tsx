@@ -1,32 +1,32 @@
-import React from "react";
+import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { render, screen } from "@testing-library/react";
-import ProjectCard from "../ProjectCard";
-import { Project } from "../../../model/project";
-import { User } from "../../../model/user";
+import { render, screen } from '@testing-library/react';
+import ProjectCard from '../ProjectCard';
+import { Project } from '../../../model/project';
+import { User } from '../../../model/user';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { test, expect } from "vitest";
+import { test, expect } from 'vitest';
 
 const projectMock: Project = {
-  _id: "8a9sdfasdf989fd",
-  title: "React",
+  _id: '8a9sdfasdf989fd',
+  title: 'React',
   description:
-    "React es el Framework web basado en componentes de Facebook. Cuenta con una curva de aprendizaje corta y mucha flexibilidad",
-  version: "17.0.1",
-  link: "https://reactjs.org/docs/hello-world.html",
-  tag: "JavaScript, Typescript, React",
-  timestamp: 765817712000,
+    'React es el Framework web basado en componentes de Facebook. Cuenta con una curva de aprendizaje corta y mucha flexibilidad',
+  version: '17.0.1',
+  link: 'https://reactjs.org/docs/hello-world.html',
+  tag: 'JavaScript, Typescript, React',
+  timestamp: 765817712000
 };
 
 const userLogggedMock: User = {
   active: true,
-  id: "a8sfd9sf",
-  email: "johndoe@gmail.com",
+  id: 'a8sfd9sf',
+  email: 'johndoe@gmail.com'
 };
 
-const mockFeatured = "FEATURED";
+const mockFeatured = 'FEATURED';
 
-test("Card Title", () => {
+test('Card Title', () => {
   const { getByText } = render(
     <ProjectCard
       project={projectMock}
@@ -38,7 +38,7 @@ test("Card Title", () => {
   expect(getByText(projectMock.title)).toBeInTheDocument();
 });
 
-test("Card Description", () => {
+test('Card Description', () => {
   const { getByText } = render(
     <ProjectCard
       project={projectMock}
@@ -50,7 +50,7 @@ test("Card Description", () => {
   expect(getByText(projectMock.description)).toBeInTheDocument();
 });
 
-test("Card Version", () => {
+test('Card Version', () => {
   const { getByText } = render(
     <ProjectCard
       project={projectMock}
@@ -62,7 +62,7 @@ test("Card Version", () => {
   expect(getByText(projectMock.version)).toBeInTheDocument();
 });
 
-test("Featured filled", () => {
+test('Featured filled', () => {
   const { getByText } = render(
     <ProjectCard
       project={projectMock}
@@ -75,7 +75,7 @@ test("Featured filled", () => {
   expect(getByText(mockFeatured)).toBeInTheDocument();
 });
 
-test("Featured empty", () => {
+test('Featured empty', () => {
   render(
     <ProjectCard
       project={projectMock}
@@ -84,10 +84,10 @@ test("Featured empty", () => {
       updateButton={() => {}}
     />
   );
-  expect(screen.getByTestId("caption").textContent).toBe("");
+  expect(screen.getByTestId('caption').textContent).toBe('');
 });
 
-test("User logged", () => {
+test('User logged', () => {
   render(
     <ProjectCard
       project={projectMock}
@@ -96,10 +96,10 @@ test("User logged", () => {
       updateButton={() => {}}
     />
   );
-  expect(screen.getByTestId("menuButton")).toBeInTheDocument();
+  expect(screen.getByTestId('menuButton')).toBeInTheDocument();
 });
 
-test("Caption empty", () => {
+test('Caption empty', () => {
   render(
     <ProjectCard
       project={projectMock}
@@ -108,10 +108,10 @@ test("Caption empty", () => {
       updateButton={() => {}}
     />
   );
-  expect(screen.getByTestId("caption").textContent).toBe("");
+  expect(screen.getByTestId('caption').textContent).toBe('');
 });
 
-test("External link", () => {
+test('External link', () => {
   render(
     <ProjectCard
       project={projectMock}
@@ -120,5 +120,5 @@ test("External link", () => {
       updateButton={() => {}}
     />
   );
-  expect(screen.getByRole("link")).toHaveAttribute("href", projectMock.link);
+  expect(screen.getByRole('link')).toHaveAttribute('href', projectMock.link);
 });

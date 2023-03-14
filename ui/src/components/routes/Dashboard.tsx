@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import styled from "styled-components";
-import useApp from "../../hooks/useApp";
-import { AboutMe } from "../../model/aboutme";
-import { Project } from "../../model/project";
-import AboutMeCard from "../cards/AboutMeCard";
-import ProjectCard from "../cards/ProjectCard";
-import { themes } from "../../styles/ColorStyles";
-import { MediumText } from "../../styles/TextStyles";
-import createApiClient from "../../api/api-client-factory";
-import useProject from "../../hooks/useProject";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import useApp from '../../hooks/useApp';
+import { AboutMe } from '../../model/aboutme';
+import { Project } from '../../model/project';
+import AboutMeCard from '../cards/AboutMeCard';
+import ProjectCard from '../cards/ProjectCard';
+import { themes } from '../../styles/ColorStyles';
+import { MediumText } from '../../styles/TextStyles';
+import createApiClient from '../../api/api-client-factory';
+import useProject from '../../hooks/useProject';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 interface Response {
   aboutme?: AboutMe;
@@ -34,12 +34,12 @@ const Dashboard = () => {
     async function retrieveInfo() {
       const api = createApiClient();
       try {
-        startSearch(t("loader.text"));
+        startSearch(t('loader.text'));
         const projects: Project[] = await api.getProjects();
         const aboutme: AboutMe = await api.getAboutMe();
         setResponse({ aboutme, projects });
       } catch (Error) {
-        setError("Info not found");
+        setError('Info not found');
       } finally {
         stopSearch();
       }
@@ -58,10 +58,7 @@ const Dashboard = () => {
     retrieveInfo();
   }, [setResponse, t, addNotification, removeLastNotification]);
 
-  async function deleteProject(
-    element: React.MouseEvent<HTMLElement>,
-    id: string
-  ) {
+  async function deleteProject(element: React.MouseEvent<HTMLElement>, id: string) {
     element.preventDefault();
     element.stopPropagation();
     const api = createApiClient();
@@ -71,18 +68,15 @@ const Dashboard = () => {
       const aboutme: AboutMe = await api.getAboutMe();
       setResponse({ aboutme, projects });
     } catch (e) {
-      console.log("Error deleting project", e);
+      console.log('Error deleting project', e);
     }
   }
 
-  function updateProject(
-    element: React.MouseEvent<HTMLElement>,
-    project: Project
-  ) {
+  function updateProject(element: React.MouseEvent<HTMLElement>, project: Project) {
     element.preventDefault();
     element.stopPropagation();
     setProjectOrUndefined(project);
-    navigate("/admin");
+    navigate('/admin');
   }
 
   return (
@@ -107,7 +101,7 @@ const Dashboard = () => {
           </ResponseWrapper>
         )}
 
-        {error && <ErrorMsg>{t("dashboard.error")}</ErrorMsg>}
+        {error && <ErrorMsg>{t('dashboard.error')}</ErrorMsg>}
       </ContentWrapper>
     </Wrapper>
   );

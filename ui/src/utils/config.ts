@@ -1,9 +1,9 @@
 export const getDefaultBaseUrl = (baseUrl?: string, apiBaseUrl?: string) => {
   if (baseUrl) {
-    apiBaseUrl = apiBaseUrl || "";
+    apiBaseUrl = apiBaseUrl || '';
     return baseUrl + apiBaseUrl;
   }
-  return "";
+  return '';
 };
 
 export const API_BASE_URI = getDefaultBaseUrl(

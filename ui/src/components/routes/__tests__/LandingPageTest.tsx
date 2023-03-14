@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { render, screen } from "@testing-library/react";
-import LandingPage from "../LandingPage";
+import { render, screen } from '@testing-library/react';
+import LandingPage from '../LandingPage';
 
-test("Landing Title", () => {
+test('Landing Title', () => {
   const { getByText } = render(<LandingPage />);
-  expect(getByText("landing.title")).toBeInTheDocument();
+  expect(getByText('landing.title')).toBeInTheDocument();
 });
 
-test("Landing Animation", () => {
+test('Landing Animation', () => {
   render(<LandingPage />);
-  expect(screen.getByTestId("lottieImg")).toBeInTheDocument();
+  expect(screen.getByTestId('lottieImg')).toBeInTheDocument();
 });

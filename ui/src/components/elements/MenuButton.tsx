@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { themes } from "../../styles/ColorStyles";
+import styled from 'styled-components';
+import { themes } from '../../styles/ColorStyles';
 
 interface MenuButtonProps {
   isVisible: boolean;
@@ -38,11 +38,7 @@ export function MenuButton(props: MenuButtonProps) {
           <MenuDropDownOverlay onClick={toggleMenu} />
           <MenuDropDown xAxis={props.xAxis} yAxis={props.yAxis}>
             {props.actions.map((action, index) => (
-              <MenuDropDownItem
-                isWarning={action.isWarning}
-                onClick={action.action}
-                key={index}
-              >
+              <MenuDropDownItem isWarning={action.isWarning} onClick={action.action} key={index}>
                 {action.title}
               </MenuDropDownItem>
             ))}
@@ -68,8 +64,7 @@ const KebabDot = styled.div<KebabDotProps>`
   width: 4px;
   height: 4px;
   border-radius: 2px;
-  background: ${(props) =>
-    props.dotButtonColorLight ? themes.dark.text1 : themes.light.text1};
+  background: ${(props) => (props.dotButtonColorLight ? themes.dark.text1 : themes.light.text1)};
   margin: 2px 0;
 
   @media (prefers-color-scheme: dark) {
@@ -85,8 +80,8 @@ interface MenuDropDownProps {
 const MenuDropDown = styled.div<MenuDropDownProps>`
   position: absolute;
 
-  right: ${(props) => (props.xAxis ? `${props.xAxis}px` : "6px")};
-  top: ${(props) => (props.yAxis ? `${props.yAxis}px` : "30px")};
+  right: ${(props) => (props.xAxis ? `${props.xAxis}px` : '6px')};
+  top: ${(props) => (props.yAxis ? `${props.yAxis}px` : '30px')};
 
   border-radius: 4px;
   background-color: ${themes.light.card.backgroundColorFull};
@@ -119,11 +114,9 @@ const MenuDropDownItem = styled.button<MenuDropDownItemProps>`
   background: none;
   margin: 6px 0px;
   cursor: pointer;
-  color: ${(props) =>
-    props.isWarning ? themes.light.warning : themes.light.text1};
+  color: ${(props) => (props.isWarning ? themes.light.warning : themes.light.text1)};
 
   @media (prefers-color-scheme: dark) {
-    color: ${(props) =>
-      props.isWarning ? themes.light.warning : themes.dark.text1};
+    color: ${(props) => (props.isWarning ? themes.light.warning : themes.dark.text1)};
   }
 `;

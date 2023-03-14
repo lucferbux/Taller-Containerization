@@ -1,8 +1,8 @@
-import jwt_decode from "jwt-decode";
-import { Unauthorized } from "../api/api-client";
-import createApiClient from "../api/api-client-factory";
-import { userKey } from "../constants/config";
-import { User } from "../model/user";
+import jwt_decode from 'jwt-decode';
+import { Unauthorized } from '../api/api-client';
+import createApiClient from '../api/api-client-factory';
+import { userKey } from '../constants/config';
+import { User } from '../model/user';
 
 interface UserToken {
   id: string;
@@ -48,7 +48,7 @@ function setUserToken(accessToken: string) {
     id: tokenPayload.id,
     email: tokenPayload.email,
     notBeforeTimestampInMillis: tokenPayload.iat * 1000,
-    expirationTimestampInMillis: tokenPayload.exp * 1000,
+    expirationTimestampInMillis: tokenPayload.exp * 1000
   };
   localStorage.setItem(userKey, JSON.stringify(token));
 }
@@ -76,7 +76,7 @@ async function logout() {
     await api.logout();
   } catch (error) {
     console.log(error);
-    console.log("Error while logging out");
+    console.log('Error while logging out');
   }
 }
 
@@ -108,7 +108,7 @@ function getCurrentUser(): User | undefined {
     return {
       id: user.id,
       active: true,
-      email: user.email,
+      email: user.email
     };
   } else {
     return undefined;
@@ -134,5 +134,5 @@ export {
   getCurrentUser,
   removeUser,
   setUserToken,
-  setLogoutIfExpiredHandler,
+  setLogoutIfExpiredHandler
 };
