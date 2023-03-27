@@ -8,8 +8,6 @@ const router: Router = Router();
 
 router.post('/login', AuthComponent.login);
 
-// TODO: 3) Add /logout route
-
 router.post('/logout', AuthComponent.logout);
 
 /**
