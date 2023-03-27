@@ -1,14 +1,16 @@
-const request = require("supertest");
-
-const app = require("../src/config/server/server").default;
-
-const userJson = require("./fixtures/user.json");
-const projectsJson = require("./fixtures/projects.json");
-const newprojectJson = require("./fixtures/newproject.json");
+import request from "supertest";
+import app from "../src/config/server/server";
+import userJson from "./fixtures/user.json";
+import projectsJson from "./fixtures/projects.json";
+import newProjectsJson from "./fixtures/newproject.json";
 
 /**
  * storing globals to access them in API requests
  */
+let global = {
+  token: "",
+  update_id: "",
+}
 global.token = "";
 global.update_id = "";
 
@@ -50,14 +52,14 @@ describe("AboutMe API Tests", () => {
   it("add a new project", (done) => {
     request(app)
       .post("/v1/projects/")
-      .send(newprojectJson)
+      .send(newProjectsJson)
       .set("Cookie", [`token=${global.token}`])
       .expect((res) => {
         res.status.should.equal(201);
         res.body.should.not.null;
         res.body._id.should.not.be.empty;
-        res.body.title.should.equal(newprojectJson.title);
-        res.body.description.should.equal(newprojectJson.description);
+        res.body.title.should.equal(newProjectsJson.title);
+        res.body.description.should.equal(newProjectsJson.description);
         global.update_id = res.body._id;
       })
       .end(done);
@@ -70,8 +72,8 @@ describe("AboutMe API Tests", () => {
         res.status.should.equal(200);
         res.body.should.not.null; 
         res.body.length.should.equal(4);    
-        res.body[3].title.should.equal(newprojectJson.title);
-        res.body[3].description.should.equal(newprojectJson.description);
+        res.body[3].title.should.equal(newProjectsJson.title);
+        res.body[3].description.should.equal(newProjectsJson.description);
         res.body[3]._id.should.equal(global.update_id);
       })
       .end(done);
@@ -80,14 +82,14 @@ describe("AboutMe API Tests", () => {
   it("update a new project", (done) => {
     request(app)
       .put("/v1/projects/")
-      .send({...newprojectJson, title: NEW_TITLE_UPDATE, _id: global.update_id})
+      .send({...newProjectsJson, title: NEW_TITLE_UPDATE, _id: global.update_id})
       .set("Cookie", [`token=${global.token}`])
       .expect((res) => {
         res.status.should.equal(201);
         res.body.should.not.null;
         res.body._id.should.not.be.empty;
         res.body.title.should.equal(NEW_TITLE_UPDATE);
-        res.body.description.should.equal(newprojectJson.description);
+        res.body.description.should.equal(newProjectsJson.description);
         global.update_id = res.body._id;
       })
       .end(done);
@@ -101,7 +103,7 @@ describe("AboutMe API Tests", () => {
         res.body.should.not.null; 
         res.body.length.should.equal(4);    
         res.body[3].title.should.equal(NEW_TITLE_UPDATE);
-        res.body[3].description.should.equal(newprojectJson.description);
+        res.body[3].description.should.equal(newProjectsJson.description);
         res.body[3]._id.should.equal(global.update_id);
       })
       .end(done);
@@ -116,7 +118,7 @@ describe("AboutMe API Tests", () => {
         res.status.should.equal(200);
         res.body.should.not.null;
         res.body._id.should.not.be.empty;
-        res.body._id.should.equal(update_id);
+        res.body._id.should.equal(global.update_id);
       })
       .end(done);
   });

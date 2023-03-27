@@ -8,10 +8,6 @@ import { H3, DescriptionCard, SmallText, SmallText2 } from '../../styles/TextSty
 import { MenuButton } from '../elements/MenuButton';
 import codeIcon from './code.svg';
 
-// TODO: 10) Añadir testing para ProjectCard
-
-// TODO: 11) Crear storybook para Project Card
-// TODO: 12) Crear tests de integración con testing-library/react para ProjectCard
 
 interface ProjectCardProps {
   project: Project;
@@ -21,21 +17,11 @@ interface ProjectCardProps {
   captionText?: string;
 }
 
-// TODO: 11) Crear storybook para Project Card
-// TODO: 12) Crear tests de integración con testing-library/react para ProjectCard
-
 const ProjectCard = (props: ProjectCardProps) => {
   const { project } = props;
 
-  // TODO: 9) Change useAuth to props
 
   const [isVisible, toggle] = useToggle(false);
-
-  // TODO: 6) Move de logic of the menu to a new component
-  // 1. Create a new component called MenuButton
-  // 2. Define the props of the component
-  // 3. Move away all the subcomponents and logic to the new component
-  // 4. Import the component here
 
   return (
     <Wrapper href={project.link} target="_blank" rel="noopener">

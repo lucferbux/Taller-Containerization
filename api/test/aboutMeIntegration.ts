@@ -1,15 +1,17 @@
-const request = require("supertest");
-
-const app = require("../src/config/server/server").default;
-
-const userJson = require("./fixtures/user.json");
-const aboutmeJson = require("./fixtures/aboutme.json");
-
+import request from "supertest";
+import app from "../src/config/server/server";
+import userJson from "./fixtures/user.json";
+import aboutmeJson from "./fixtures/aboutme.json";
 
 /**
  * storing globals to access them in API requests
  */
+let global = {
+  token: "",
+  update_id: "",
+}
 global.token = "";
+global.update_id = "";
 
 /**
  * AboutMe API tests

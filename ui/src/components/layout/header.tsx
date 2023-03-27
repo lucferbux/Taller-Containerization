@@ -7,8 +7,6 @@ import useToggle from '../../hooks/useToogle';
 import { themes } from '../../styles/ColorStyles';
 import { MenuButton } from '../elements/MenuButton';
 
-// TODO: 10) Añadir testing para Header
-
 export const home = {
   title: 'nav.home',
   link: '/'
@@ -28,8 +26,6 @@ export const menuData = [
 const Header = () => {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
-
-  // TODO: 7) Add the menu button with a logout action
 
   const [isVisible, toggle] = useToggle(false);
 

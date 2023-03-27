@@ -50,15 +50,12 @@ const handleResponse = async <T>(func: () => Promise<T>): Promise<T> => {
     return await func();
   } catch (e) {
     if (e instanceof Unauthorized) {
-      // TODO: 4) Refactor auth calls
       removeUser();
       window.location.replace('/');
     }
     throw e;
   }
 };
-
-// TODO: 5) Remove authorization header from all requests
 
 export default class HttpApiClient implements ApiClient {
   baseUrl: string;
@@ -81,8 +78,6 @@ export default class HttpApiClient implements ApiClient {
     }
     return response.json();
   }
-
-  // TODO: 5) Add logout to api call
 
   async logout(): Promise<ProjectResponse> {
     const response = await fetch(this.baseUrl + '/auth/logout/', {

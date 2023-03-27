@@ -1,4 +1,4 @@
-import * as flow from 'dotenv-flow';
+import flow from 'dotenv-flow';
 
 flow.config();
 interface IConfig {

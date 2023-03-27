@@ -1,13 +1,17 @@
-const request = require("supertest");
+import request from "supertest";
+import app from "../src/config/server/server";
+import user from "./fixtures/user.json";
 
-const app = require("../src/config/server/server").default;
-
-const user = require("./fixtures/user.json");
 
 /**
  * storing globals to access them in API requests
  */
- global.token = "";
+let global = {
+  token: "",
+  update_id: "",
+}
+global.token = "";
+global.update_id = "";
 
 describe("Authentication Integration Test", () => {
   it("login form", (done) => {

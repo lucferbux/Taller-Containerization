@@ -51,7 +51,6 @@ const Login = () => {
   }
 
   function readyToSubmit(): boolean {
-    // TODO: Add email check
     return username !== '' && password !== '';
   }
 
