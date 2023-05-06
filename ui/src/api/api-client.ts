@@ -51,5 +51,4 @@ export default interface ApiClient {
   updateProject(project: Project): Promise<ProjectResponse>;
   createOrUpdateProject(project: Project, create: boolean): Promise<ProjectResponse>;
   deleteProject(projectId: string): Promise<ProjectResponse>;
-  triggerSentryError(): Promise<ProjectResponse>;
 }
