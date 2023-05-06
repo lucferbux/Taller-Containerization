@@ -16,7 +16,7 @@
         "error": "Error loading data"
     },
     "login": {
-        "err_usr_pass": "Username and password must not be null",
+        "err_usr_pass": "Username and password must not be empty",
         "err_inv_lgn": "Invalid login",
         "email_placeholder": "email",
         "password_placeholder": "password",
@@ -24,7 +24,7 @@
         "login_title": "Login Panel"
     },
     "admin": {
-        "err_invalid_form": "Inputs must not be null",
+        "err_invalid_form": "Inputs must not be empty",
         "err_network": "Error posting project",
         "suc_network": "Project posted",
         "suc_network_update": "Project updated",

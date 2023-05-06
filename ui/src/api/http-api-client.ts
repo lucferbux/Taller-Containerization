@@ -1,6 +1,7 @@
 import ApiClient, {
   ApiError,
   BadRequest,
+  DashboardInfo,
   Forbidden,
   GenericError,
   NotFound,
@@ -79,7 +80,7 @@ export default class HttpApiClient implements ApiClient {
     return response.json();
   }
 
-  async logout(): Promise<ProjectResponse> {
+  logout = async (): Promise<ProjectResponse> => {
     const response = await fetch(this.baseUrl + '/auth/logout/', {
       method: 'POST'
     });
@@ -87,7 +88,7 @@ export default class HttpApiClient implements ApiClient {
       throw await createApiError(response);
     }
     return response.json();
-  }
+  };
 
   getAboutMe = (): Promise<AboutMe> =>
     handleResponse(async () => {
@@ -111,7 +112,27 @@ export default class HttpApiClient implements ApiClient {
       return response.json();
     });
 
-  async postProject(project: Project): Promise<ProjectResponse> {
+  getDashboardInfo = (): Promise<DashboardInfo> => {
+    return Promise.all([this.getAboutMe(), this.getProjects()]).then(([aboutMe, projects]) => {
+      return {
+        aboutMe,
+        projects
+      };
+    });
+  };
+
+  triggerSentryError = (): Promise<ProjectResponse> =>
+    handleResponse(async () => {
+      const response = await fetch(this.baseUrl + `/v1/7a8sdf898sdf98df98d/`, {
+        method: 'GET'
+      });
+      if (!response.ok) {
+        throw await createApiError(response);
+      }
+      return response.json();
+    });
+
+  postProject = async (project: Project): Promise<ProjectResponse> => {
     const response = await fetch(this.baseUrl + '/v1/projects/', {
       method: 'POST',
       headers: {
@@ -124,9 +145,9 @@ export default class HttpApiClient implements ApiClient {
       throw await createApiError(response);
     }
     return response.json();
-  }
+  };
 
-  async updateProject(project: Project): Promise<ProjectResponse> {
+  updateProject = async (project: Project): Promise<ProjectResponse> => {
     const response = await fetch(this.baseUrl + '/v1/projects/', {
       method: 'PUT',
       headers: {
@@ -139,9 +160,17 @@ export default class HttpApiClient implements ApiClient {
       throw await createApiError(response);
     }
     return response.json();
-  }
+  };
 
-  async deleteProject(projectId: string): Promise<ProjectResponse> {
+  createOrUpdateProject = async (project: Project, create: boolean): Promise<ProjectResponse> => {
+    if (create) {
+      return this.postProject(project);
+    } else {
+      return this.updateProject(project);
+    }
+  };
+
+  deleteProject = async (projectId: string): Promise<ProjectResponse> => {
     const response = await fetch(this.baseUrl + '/v1/projects/', {
       method: 'DELETE',
       headers: {
@@ -154,5 +183,5 @@ export default class HttpApiClient implements ApiClient {
       throw await createApiError(response);
     }
     return response.json();
-  }
+  };
 }

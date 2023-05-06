@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import useApp from '../../hooks/useApp';
-import { AboutMe } from '../../model/aboutme';
 import { Project } from '../../model/project';
 import AboutMeCard from '../cards/AboutMeCard';
 import ProjectCard from '../cards/ProjectCard';
@@ -12,61 +10,25 @@ import createApiClient from '../../api/api-client-factory';
 import useProject from '../../hooks/useProject';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-
-interface Response {
-  aboutme?: AboutMe;
-  projects?: Project[];
-}
+import Loader from '../elements/Loader';
+import useFetchData from '../../hooks/useFetchData';
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [response, setResponse] = useState<Response | undefined>(undefined);
-  const [error, setError] = useState<string | undefined>(undefined);
+  const apiClient = useMemo(() => createApiClient(), []);
+  const { data, isLoading, error, reload: reloadData } = useFetchData(apiClient.getDashboardInfo);
 
   const { user } = useAuth();
-
-  const { addNotification, removeLastNotification } = useApp();
-
   const { setProjectOrUndefined } = useProject();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function retrieveInfo() {
-      const api = createApiClient();
-      try {
-        startSearch(t('loader.text'));
-        const projects: Project[] = await api.getProjects();
-        const aboutme: AboutMe = await api.getAboutMe();
-        setResponse({ aboutme, projects });
-      } catch (Error) {
-        setError('Info not found');
-      } finally {
-        stopSearch();
-      }
-    }
-
-    function startSearch(msg: string) {
-      setResponse(undefined);
-      setError(undefined);
-      addNotification(msg);
-    }
-
-    function stopSearch() {
-      removeLastNotification();
-    }
-
-    retrieveInfo();
-  }, [setResponse, t, addNotification, removeLastNotification]);
 
   async function deleteProject(element: React.MouseEvent<HTMLElement>, id: string) {
     element.preventDefault();
     element.stopPropagation();
-    const api = createApiClient();
+
     try {
-      await api.deleteProject(id);
-      const projects: Project[] = await api.getProjects();
-      const aboutme: AboutMe = await api.getAboutMe();
-      setResponse({ aboutme, projects });
+      await apiClient.deleteProject(id);
+      reloadData();
     } catch (e) {
       console.log('Error deleting project', e);
     }
@@ -79,29 +41,43 @@ const Dashboard = () => {
     navigate('/admin');
   }
 
+  if (isLoading) {
+    return <Loader message="Loading data" />;
+  }
+
+  if (error) {
+    return (
+      <Wrapper>
+        <ContentWrapper>
+          <ErrorMsg>{t('dashboard.error')}</ErrorMsg>
+        </ContentWrapper>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <ContentWrapper>
-        {response && (
+        {data && (
           <ResponseWrapper>
             <AboutMeWrapper>
-              {response?.aboutme && <AboutMeCard aboutMe={response?.aboutme} />}
+              {data?.aboutMe && <AboutMeCard aboutMe={data?.aboutMe} />}
             </AboutMeWrapper>
             <ProjectWrapper>
-              {response?.projects?.map((project, index) => (
-                <ProjectCard
-                  project={project}
-                  key={index}
-                  user={user}
-                  closeButton={(e, id) => deleteProject(e, id)}
-                  updateButton={(e, id) => updateProject(e, id)}
-                />
-              ))}
+              {data?.projects
+                ?.sort((a, b) => b.timestamp - a.timestamp)
+                .map((project, index) => (
+                  <ProjectCard
+                    project={project}
+                    key={index}
+                    user={user}
+                    closeButton={(e, id) => deleteProject(e, id)}
+                    updateButton={(e, id) => updateProject(e, id)}
+                  />
+                ))}
             </ProjectWrapper>
           </ResponseWrapper>
         )}
-
-        {error && <ErrorMsg>{t('dashboard.error')}</ErrorMsg>}
       </ContentWrapper>
     </Wrapper>
   );

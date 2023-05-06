@@ -1,8 +1,14 @@
 import { createContext, ReactNode, useCallback, useState } from 'react';
 import { Project } from '../model/project';
 
-const ProjectContext = createContext<any>({
-  project: undefined
+type ProjectcontextType = {
+  project: Project | undefined;
+  setProjectOrUndefined: (newProject: Project | undefined) => void;
+};
+
+const ProjectContext = createContext<ProjectcontextType>({
+  project: undefined,
+  setProjectOrUndefined: () => {}
 });
 
 interface Props {
