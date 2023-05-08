@@ -3,12 +3,14 @@ import { Project } from '../model/project';
 
 type ProjectcontextType = {
   project: Project | undefined;
-  setProjectOrUndefined: (newProject: Project | undefined) => void;
+  addProject: (newProject: Project) => void;
+  removeProject: () => void;
 };
 
 const ProjectContext = createContext<ProjectcontextType>({
   project: undefined,
-  setProjectOrUndefined: () => {}
+  addProject: () => {},
+  removeProject: () => {}
 });
 
 interface Props {
@@ -18,15 +20,20 @@ interface Props {
 export function ProjectProvider({ children }: Props) {
   const [project, setProject] = useState<Project | undefined>(undefined);
 
-  const setProjectOrUndefined = useCallback(
-    (newProject: Project | undefined) => {
+  const addProject = useCallback(
+    (newProject: Project) => {
       setProject(newProject);
     },
     [setProject]
   );
 
+  const removeProject = useCallback(() => {
+    setProject(undefined);
+  }, [setProject]);
+
+
   return (
-    <ProjectContext.Provider value={{ project, setProjectOrUndefined }}>
+    <ProjectContext.Provider value={{ project, addProject, removeProject }}>
       {children}
     </ProjectContext.Provider>
   );

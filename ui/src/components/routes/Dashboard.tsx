@@ -19,7 +19,7 @@ const Dashboard = () => {
   const { data, isLoading, error, reload: reloadData } = useFetchData(apiClient.getDashboardInfo);
 
   const { user } = useAuth();
-  const { setProjectOrUndefined } = useProject();
+  const { addProject } = useProject();
   const navigate = useNavigate();
 
   async function deleteProject(element: React.MouseEvent<HTMLElement>, id: string) {
@@ -37,7 +37,7 @@ const Dashboard = () => {
   function updateProject(element: React.MouseEvent<HTMLElement>, project: Project) {
     element.preventDefault();
     element.stopPropagation();
-    setProjectOrUndefined(project);
+    addProject(project);
     navigate('/admin');
   }
 

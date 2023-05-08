@@ -23,51 +23,52 @@ const Admin = () => {
   const navigate = useNavigate();
   const apiClient = useMemo(() => createApiClient(), []);
   const { createOrUpdate, status, error } = useCreateOrUpdate(apiClient.createOrUpdateProject);
-  const { project, setProjectOrUndefined } = useProject();
+  const { project, removeProject } = useProject();
 
   const [projectInput, setProjectInput] = useState<Partial<Project>>(project || emptyProjectInput);
 
+  const readyToSubmit =
+    projectInput.title !== '' &&
+    projectInput.description !== '' &&
+    projectInput.tag !== '' &&
+    projectInput.version !== '';
+
   useEffect(() => {
     if (status === 'success') {
-      setProjectOrUndefined(undefined);
+      removeProject();
       navigate('/dashboard');
     }
     return () => {
-      setProjectOrUndefined(undefined);
+      removeProject();
     };
-  }, [status, setProjectOrUndefined, navigate]);
+  }, [status, removeProject, navigate]);
 
   async function postProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const errorMessage = !readyToSubmit() ? t('admin.err_invalid_form') : undefined;
+    const errorMessage = !readyToSubmit ? t('admin.err_invalid_form') : undefined;
     const newProject = {
       ...projectInput,
-      _id: project?._id || undefined,
-      timestamp: project?.timestamp || Date.now()
+      timestamp: projectInput?.timestamp || Date.now()
     };
 
-    createOrUpdate(newProject as Project, project === undefined, errorMessage);
+    createOrUpdate(newProject as Project, projectInput._id === undefined, errorMessage);
   }
 
   function onChange(e: ChangeEvent<HTMLInputElement>, attribute: keyof Project) {
     setProjectInput({ ...projectInput, [attribute]: e.target.value });
   }
 
-  function readyToSubmit(): boolean {
-    return (
-      projectInput.title !== '' &&
-      projectInput.description !== '' &&
-      projectInput.tag !== '' &&
-      projectInput.version !== ''
-    );
+  function onReset() {
+    removeProject();
+    setProjectInput(emptyProjectInput);
   }
-  
+
   return (
     <Wrapper>
       {status === 'loading' && <Loader message={t('loader.text')} />}
       <ContentWrapper>
         <TitleForm>{t('admin.header')}</TitleForm>
-        <LoginPannel onSubmit={postProject} onReset={() => setProjectInput(emptyProjectInput)}>
+        <LoginPannel onSubmit={postProject} onReset={onReset}>
           {error && <ErrorDescription>{error.message}</ErrorDescription>}
           <LoginForm
             name="title"
@@ -113,11 +114,9 @@ const Admin = () => {
               }
             />
             <ButtonForm
-              disabled={status === 'loading'}
+              disabled={status === 'loading' || !readyToSubmit}
               type="submit"
-              value={
-                t('admin.button_accept') != null ? (t('admin.button_accept') as string) : 'Publish'
-              }
+              value={project ? t('admin.button_accept_update') : t('admin.button_accept')}
             />
           </ButtonWrapper>
         </LoginPannel>

@@ -35,6 +35,7 @@
         "input_tags": "Tags",
         "input_version": "Version",
         "button_accept": "Post",
+        "button_accept_update": "Update",
         "button_delete": "Delete"
     },
     "nav": {
