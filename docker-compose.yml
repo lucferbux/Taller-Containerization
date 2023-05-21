@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+
+  ui:
+    container_name: ui_react
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    environment:
+      VITE_PROXY_HOST: http://api:4000
+    ports:
+      - 5173:5173
+    depends_on:
+      - api
+    networks:
+      - mynet
+
+  api:
+    container_name: api_express
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    expose:
+      - 4000
+    restart: always
+    environment:
+      NODE_ENV: development
+      SECRET: e42d8dd28adf34fc489044d5aa21e5166f22a6ef
+      MONGODB_URI: mongodb://mongodb:27017/
+      MONGODB_DB_MAIN: portfolio_db
+      PORT: 4000
+    networks:
+      - mynet
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0.8
+    restart: always
+    environment:
+        MONGO_INITDB_DATABASE: portfolio_db
+    ports:
+      - 27017:27017
+    volumes:
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - mynet
+
+networks:
+  mynet:

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "docker": "vite --host",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",

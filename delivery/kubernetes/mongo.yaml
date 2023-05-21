@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
+        ports:
+          - containerPort: 27017
+        env:
+          - name: MONGO_INITDB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: mongodb-configmap
+                key: database_name
+        volumeMounts:
+          - name: init-script-volume
+            mountPath: /docker-entrypoint-initdb.d/mongo-init.js
+            subPath: mongo-init.js
+          - name: mongo-data-dir
+            mountPath: /data/db
+      volumes:
+        - name: init-script-volume
+          configMap:
+            name: mongodb-configmap
+            items:
+            - key: mongo-init.js
+              path: mongo-init.js
+        - name: mongo-data-dir
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

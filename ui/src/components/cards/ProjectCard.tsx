@@ -8,7 +8,6 @@ import { H3, DescriptionCard, SmallText, SmallText2 } from '../../styles/TextSty
 import { MenuButton } from '../elements/MenuButton';
 import codeIcon from './code.svg';
 
-
 interface ProjectCardProps {
   project: Project;
   user: User | undefined;
@@ -19,7 +18,6 @@ interface ProjectCardProps {
 
 const ProjectCard = (props: ProjectCardProps) => {
   const { project } = props;
-
 
   const [isVisible, toggle] = useToggle(false);
 

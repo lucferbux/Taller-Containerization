@@ -1,7 +1,11 @@
 USER  ?= user@gmail.com
 PASS  ?= patata
 MONGODB_ATLAS ?= mongodb+srv://<username>:<password>@<cluster>.mongodb.net
-
+DOCKER_COMPOSE_TEST=docker-compose -f docker-compose.test.yml
+DOCKER_COMPOSE_PROD=docker-compose -f docker-compose.prod.yml
+VERSION=0.0.1
+DOCKER_NAMESPACE?=lucferbux
+DOCKER_TAG_SNAPSHOT=$(shell echo VERSION)-$(shell git rev-parse --short HEAD)-SNAPSHOT
 
 # Init Scripts
 
@@ -11,7 +15,7 @@ dev-api:
 
 .PHONY: dev-ui
 dev-ui:
-	cd ui && npm run dev
+	cd ui && npm run start
 
 .PHONY: dev-ui-secure
 dev-ui-secure:
@@ -80,3 +84,73 @@ audit-api:
 .PHONY: story-book
 story-book:
 	cd ui && npm run storybook
+
+.PHONY: test
+test:
+	CI=true npm run test
+
+# Docker
+
+.PHONY: docker-build-images
+docker-build-images:
+	docker build -t $(DOCKER_NAMESPACE)/api:$(DOCKER_TAG_SNAPSHOT) ./api
+	docker build -t $(DOCKER_NAMESPACE)/nginx:$(DOCKER_TAG_SNAPSHOT) -f nginx/Dockerfile .
+
+.PHONY: docker-deploy
+docker-deploy: docker-build-images
+	for component in api nginx; do \
+		docker push $(DOCKER_NAMESPACE)/$$component:$(DOCKER_TAG_SNAPSHOT) ; \
+	done
+
+.PHONY: docker-dev-up
+docker-dev-up:
+	docker-compose up --build -d
+
+.PHONY: docker-prod-up
+docker-prod-up:
+	$(DOCKER_COMPOSE_PROD) up --build
+
+.PHONY: docker-ci-up
+docker-ci-up:
+	$(DOCKER_COMPOSE_TEST) up --build -d
+
+.PHONY: docker-ci-api
+docker-ci-api: docker-ci-up
+	$(DOCKER_COMPOSE_TEST) run node npm run test
+	$(DOCKER_COMPOSE_TEST) run node npm run lint
+
+# Kubernetes
+
+.PHONY: k8s-create-ns
+k8s-create-ns:
+	kubectl create namespace portfolio-app
+
+.PHONY: k8s-deploy
+k8s-deploy:
+	kubectl apply -f delivery/kubernetes/ -n portfolio-app
+
+.PHONY: k8s-status
+k8s-status:
+	kubectl get all -n portfolio-app
+
+.PHONE: k8s-status-pods
+k8s-status-pods:
+	kubectl get pods -n portfolio-app
+
+.PHONE: k8s-delete-all
+k8s-delete-all:
+	kubectl delete -f delivery/kubernetes/ -n portfolio-app
+
+.PHONY: k8s-get-service
+k8s-get-service:
+	minikube service frontend-nginx-service --url -n portfolio-app 
+
+.PHONY: k8s-dashboard
+k8s-dashboard:
+	minikube dashboard
+
+# Certificates
+
+.PHONY: generate-certificates
+generate-certificates:
+	cd nginx && ./generate-certificates.sh

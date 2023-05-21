@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-nginx
+  labels:
+    app: front-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: front-nginx
+  template:
+    metadata:
+      labels:
+        app: front-nginx
+    spec:
+      containers:
+      - name: front-nginx
+        image: lucferbux/nginx:VERSION-feb12c8-SNAPSHOT
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
+        ports:
+          - containerPort: 80
+          - containerPort: 443
+        env:
+          - name: BACKEND_API
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: api_url
+          - name: NGINX_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: frontend-configmap
+                key: nginx_port
+          - name: NGINX_HTTPS_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: frontend-configmap
+                key: nginx_https_port
+          - name: FORCE_HTTPS
+            valueFrom: 
+              configMapKeyRef:
+                name: frontend-configmap
+                key: force_https
+        volumeMounts:
+          - name: certs-volume
+            mountPath: /var/certificates/
+      volumes:
+        - name: certs-volume
+          secret:
+            secretName: frontend-secret
+            items:
+              - key: localhost.crt
+                path: localhost.crt
+              - key: localhost.key
+                path: localhost.key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-nginx-service
+spec:
+  selector:
+    app: front-nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+      name: https

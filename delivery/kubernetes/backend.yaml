@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-express
+  labels:
+    app: api-express
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-express
+  template:
+    metadata:
+      labels:
+        app: api-express
+    spec:
+      containers:
+      - name: api-express
+        image: lucferbux/api:VERSION-feb12c8-SNAPSHOT
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
+        ports:
+          - containerPort: 4000
+        env:
+          - name: SECRET
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: jwt-secret
+          - name: PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: node_port
+          - name: MONGODB_URI
+            valueFrom: 
+              configMapKeyRef:
+                name: mongodb-configmap
+                key: database_url
+          - name: MONGODB_DB_MAIN
+            valueFrom: 
+              configMapKeyRef:
+                name: mongodb-configmap
+                key: database_name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-express-service
+spec:
+  selector:
+    app: api-express
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
