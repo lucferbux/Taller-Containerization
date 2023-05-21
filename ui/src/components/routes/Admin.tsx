@@ -227,6 +227,7 @@ const ButtonForm = styled.input`
   border: none;
   background-color: ${themes.light.primary};
   color: ${themes.dark.text1};
+  opacity: ${(props) => (props.disabled ? '0.5' : '1')};
 
   @media (prefers-color-scheme: dark) {
     background-color: ${themes.dark.primary};
@@ -234,14 +235,6 @@ const ButtonForm = styled.input`
 `;
 
 const ButtonCancel = styled(ButtonForm)`
-  background-color: ${themes.light.warning};
-`;
-
-const ButtonError = styled.button`
-  height: 36px;
-  border-radius: 4px;
-  border: none;
-  color: ${themes.dark.text1};
   background-color: ${themes.light.warning};
 `;
 
