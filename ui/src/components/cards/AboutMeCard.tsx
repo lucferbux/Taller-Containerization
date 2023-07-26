@@ -8,9 +8,15 @@ import AboutMeCardRow from './AboutMeCardRow';
 import avatarCard from './Avatar.jpg';
 
 interface AboutMeCardProps {
+  /**
+   * Detailed information about the user
+   */
   aboutMe: AboutMe;
 }
 
+/**
+ * Primary UI component to display the about me card
+ */
 const AboutMeCard = (props: AboutMeCardProps) => {
   const { t } = useTranslation();
 
