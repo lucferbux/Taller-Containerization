@@ -18,9 +18,7 @@ Para poner en marcha el proyecto tenemos que seguir los pasos detallados en el [
 
 // TODO 0: Instalar [Docker](https://docs.docker.com/get-docker/) y [Docker Compose](https://docs.docker.com/compose/install/) en nuestro equipo
 
-// TODO 1: Crear un fichero Dockerfile para la ui dentro de la carpeta /ui. Este Dockerfile debe empezar con una [imagen node](https://hub.docker.com/_/node) y debe tener los *react scripts* instalados en la imagen, para poder después ejecutar el frontend en modo desarrollador.
-
-// TODO 1 (HINT): RUN npm install react-scripts@4.0.3 -g
+// TODO 1: Crear un fichero Dockerfile para la ui dentro de la carpeta /ui. Este Dockerfile debe empezar con una [imagen node](https://hub.docker.com/_/node) y luego debe instalar las dependencias con `npm install`.
 
 // TODO 1 (HINT): Crea un fichero .dockerignore para evitar copiar la carpeta *node_modules*
 
