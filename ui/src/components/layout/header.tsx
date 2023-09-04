@@ -7,6 +7,7 @@ import { themes } from '../../styles/ColorStyles';
 import { MenuButton } from '../elements/MenuButton';
 import { User } from '../../model/user';
 
+
 export const home = {
   title: 'nav.home',
   link: '/'
@@ -34,7 +35,7 @@ const Header = ({ user, logout }: HeaderProps) => {
   const [isVisible, toggle] = useToggle(false);
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="navbar">
       <Link to={home.link}>
         <LinkButton>{t(home.title)}</LinkButton>
       </Link>

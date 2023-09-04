@@ -21,7 +21,7 @@ const AboutMeCard = (props: AboutMeCardProps) => {
   const { t } = useTranslation();
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="aboutme-card">
       <ImageWrapper src={avatarCard} data-testid="aboutImg" />
       <InfoWrapper>
         <InfoSection>
