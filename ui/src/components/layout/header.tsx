@@ -7,7 +7,6 @@ import { themes } from '../../styles/ColorStyles';
 import { MenuButton } from '../elements/MenuButton';
 import { User } from '../../model/user';
 
-
 export const home = {
   title: 'nav.home',
   link: '/'
