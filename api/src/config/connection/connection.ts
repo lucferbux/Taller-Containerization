@@ -32,7 +32,7 @@ db.on('error', (error: any) => {
 });
 
 db.on('connected', () => {
-  Logger.info('[MongoDB] connected');
+  Logger.info(`[MongoDB] connected at ${MONGO_URI}`);
 });
 
 db.once('open', () => {
