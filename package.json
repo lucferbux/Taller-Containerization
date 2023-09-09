@@ -1,44 +1,45 @@
 {
-    "name": "portfolio-app",
-    "version": "0.0.1",
-    "description": "Personal portfolio app.",
-    "author": "Lucas Fernandez",
-    "license": "ISC",
-    "private": true,
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/lucferbux/Taller-Containerization"
-    },
-    "homepage": "https://github.com/lucferbux/Taller-Containerization#readme",
-    "bugs": {
-      "url": "https://github.com/lucferbux/Taller-Containerization/issues"
-    },
-    "engines": {
-      "node": ">=12.0.0"
-    },
-    "scripts": {
-      "build": "run-p -l build:*",
-      "build:api": "cd ./api && npm run build",
-      "build:ui": "cd ./ui && npm run build",
-      "dev": "run-p -l dev:*",
-      "dev:api": "cd ./api && npm run dev",
-      "dev:ui": "cd ./ui && npm run dev",
-      "format": "prettier --write \"api/**/*.ts\" \"ui/**/*.ts\" \"ui/**/*.tsx\"",
-      "make": "make",
-      "start": "run-p start:*",
-      "start:api": "cd ./api && npm start",
-      "start:ui": "echo \"...available at ./ui/public\"",
-      "test": "run-s test:api test:ui test:e2e",
-      "test:api": "cd ./api && npm run test",
-      "test:ui": "cd ./ui && npm run test",
-      "test:e2e": "cd ./ui && npm run test:e2e",
-      "lint": "run-s lint:api lint:ui",
-      "lint:api": "cd ./api && npm run lint",
-      "lint:ui": "cd ./ui && npm run lint"
-    },
-    "dependencies": {
-      "npm-run-all": "^4.1.5",
-      "prettier": "^2.2.1"
-    }
+  "name": "portfolio-app",
+  "version": "0.0.1",
+  "description": "Personal portfolio app.",
+  "author": "Lucas Fernandez",
+  "license": "ISC",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucferbux/Taller-Containerization"
+  },
+  "homepage": "https://github.com/lucferbux/Taller-Containerization#readme",
+  "bugs": {
+    "url": "https://github.com/lucferbux/Taller-Containerization/issues"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "build": "run-p -l build:*",
+    "build:api": "cd ./api && npm run build",
+    "build:ui": "cd ./ui && npm run build",
+    "dev": "run-p -l dev:*",
+    "dev:api": "cd ./api && npm run dev",
+    "dev:ui": "cd ./ui && npm run dev",
+    "format": "prettier --write \"api/**/*.ts\" \"ui/**/*.ts\" \"ui/**/*.tsx\"",
+    "make": "make",
+    "postinstall": "run-p postinstall:*",
+    "postinstall:api": "cd ./api && npm install",
+    "postinstall:ui": "cd ./ui && npm install",
+    "start": "run-p start:*",
+    "start:api": "cd ./api && npm start",
+    "start:ui": "echo \"...available at ./ui/public\"",
+    "test": "run-s test:api test:ui",
+    "test:api": "cd ./api && npm run test",
+    "test:ui": "cd ./ui && npm run test",
+    "lint": "run-s lint:api lint:ui",
+    "lint:api": "cd ./api && npm run lint",
+    "lint:ui": "cd ./ui && npm run lint"
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1"
   }
-  
+}
