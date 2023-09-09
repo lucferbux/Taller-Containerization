@@ -26,8 +26,7 @@ describe("AboutMe API Tests", () => {
         .send(userJson);
       global.token = response.body.token;
     } catch (error) {
-      console.error("Error getting cookie AboutMe API Test");
-      console.log(error);
+      console.error("Error getting cookie AboutMe API");
     }
   });
 
