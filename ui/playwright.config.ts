@@ -4,7 +4,7 @@ export default defineConfig({
   timeout: 5000,
   testDir: 'src/__tests__',
 
-  reporter: 'html',
+  reporter: 'list',
   /* Configure projects for major browsers */
   projects: [
     {
