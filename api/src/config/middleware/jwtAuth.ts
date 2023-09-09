@@ -24,7 +24,6 @@ interface RequestWithUser extends Request {
  *       bearerFormat: JWT
  */
 export function isAuthenticated(req: RequestWithUser, res: Response, next: NextFunction): void {
-
   const token: any = req.cookies.token;
 
   if (token) {
