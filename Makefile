@@ -116,8 +116,8 @@ docker-ci-up:
 
 .PHONY: docker-ci-api
 docker-ci-api: docker-ci-up
-	$(DOCKER_COMPOSE_TEST) run node npm run test
 	$(DOCKER_COMPOSE_TEST) run node npm run lint
+	$(DOCKER_COMPOSE_TEST) run node npm run test
 
 # Kubernetes
 

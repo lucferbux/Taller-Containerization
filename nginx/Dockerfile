@@ -2,7 +2,7 @@ FROM node:18-alpine3.17 AS builder
 WORKDIR /usr/src/app
 COPY ui/package*.json ./
 ADD ui/package.json /usr/src/app/package.json
-RUN npm install
+RUN npm ci
 COPY ./ui/ .
 RUN npm run build
 
