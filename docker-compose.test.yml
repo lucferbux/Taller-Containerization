@@ -13,6 +13,7 @@ services:
       SECRET: e42d8dd28adf34fc489044d5aa21e5166f22a6ef
       MONGODB_URI: mongodb://mongodb:27017/
       MONGODB_DB_MAIN: portfolio_db_test
+      VITE_PROXY_HOST: http://localhost:4000
       CI: 'true'
       PORT: 4000
     networks:
@@ -30,7 +31,6 @@ services:
       - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - mynet
-
 
 networks:
   mynet:
