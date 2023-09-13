@@ -31,7 +31,7 @@
     "start": "run-p start:*",
     "start:api": "cd ./api && npm start",
     "start:ui": "echo \"...available at ./ui/public\"",
-    "test": "run-s test:api test:ui",
+    "test": "run-s test:api test:ui test:e2e",
     "test:api": "cd ./api && npm run test",
     "test:ui": "cd ./ui && npm run test",
     "test:e2e": "cd ./ui && npm run test:e2e",
