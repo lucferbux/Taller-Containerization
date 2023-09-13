@@ -34,6 +34,7 @@
     "test": "run-s test:api test:ui",
     "test:api": "cd ./api && npm run test",
     "test:ui": "cd ./ui && npm run test",
+    "test:e2e": "cd ./ui && npm run test:e2e",
     "lint": "run-s lint:api lint:ui",
     "lint:api": "cd ./api && npm run lint",
     "lint:ui": "cd ./ui && npm run lint"
